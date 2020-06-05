@@ -1,0 +1,16 @@
+.round {
+  border-radius: 50%;
+}
+
+.toolbar-content-no-padding {
+  .v-toolbar__content {
+    padding: 0 !important;
+  }
+}
+
+.theme--light.v-card.v-card--outlined.outlined-strong {
+  border: 1px solid rgba(0, 0, 0, 0.2);
+}
+.theme--dark.v-card.v-card--outlined.outlined-strong {
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}

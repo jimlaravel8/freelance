@@ -1,0 +1,25 @@
+// Globals
+@import url('https://fonts.googleapis.com/css?family=Raleway:100,200,300,400,500,600,700,800&display=swap');
+
+$body-font-family: 'Raleway', sans-serif;
+$border-radius-root: 0;
+// $snackbar-border-radius: 0;
+// $menu-content-border-radius: 0;
+
+$navigation-active-color: #e2e2e2 !default;
+
+$container-max-widths: (
+  'md': 1280px,
+  'lg': 1280px,
+  'xl': 1280px
+);
+
+@import 'nprogress.scss';
+@import 'typography.scss';
+@import 'helpers.scss';
+@import 'navigation.scss';
+@import 'ckeditor.scss';
+@import 'tables.scss';
+@import 'forms.scss';
+@import 'layout.scss';
+@import 'overrides.scss';

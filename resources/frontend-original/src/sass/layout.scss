@@ -1,0 +1,38 @@
+.inner-container {
+  max-width: 1032px;
+  padding: 0;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.content-container {
+  max-width: 1056px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.content-tabs-wrapper,
+.content-tabs-card {
+  opacity:1;
+}
+.content-tabs > .v-tabs-bar .v-tab > *:first-child {
+    margin-bottom: 10px;
+}
+.content-tabs .v-tab:before {
+  background-color: transparent;
+}
+.theme--dark.content-tabs> .v-tabs-bar .v-tab:not(.v-tab--active),
+.theme--dark.content-tabs> .v-tabs-bar .v-tab:not(.v-tab--active) > .v-icon, 
+.theme--dark.content-tabs> .v-tabs-bar .v-tab--disabled {
+    color: rgba(255, 255, 255, 1) !important;
+}
+.theme--dark.content-tabs> .v-tabs-bar .v-tab:not(.v-tab--active), 
+.theme--dark.content-tabs> .v-tabs-bar .v-tab:not(.v-tab--active) > .v-icon, 
+.theme--dark.content-tabs> .v-tabs-bar .v-tab--disabled {
+    color: rgba(255, 255, 255, 1);
+}
+.theme--light.content-tabs> .v-tabs-bar .v-tab:not(.v-tab--active), 
+.theme--light.content-tabs> .v-tabs-bar .v-tab:not(.v-tab--active) > .v-icon, 
+.theme--light.content-tabs> .v-tabs-bar .v-tab--disabled {
+    color: rgba(0, 0, 0, 1);
+}
