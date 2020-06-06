@@ -149,9 +149,10 @@ export default {
 </script>
 
 <style scoped>
-
 .v-application .mt-0 {
-    /* height: 27 !important; */
-    width: 66%!important;
+    /* margin-top: 0!important; */
+    /* height: 35vh !important; */
+    width: 100% !important;
 }
+
 </style>
