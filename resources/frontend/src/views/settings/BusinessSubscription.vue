@@ -74,8 +74,9 @@
                           <v-input
                             prepend-icon="mdi-cash"
                             color="black"
-                            :messages="[`Amount Due | <Points Issurance Sessions> * USD ${this.transaction_fee}`]"
+                            :messages="[`Amount Due | ${ this.billings.due_details.amount } * USD ${this.transaction_fee}`]"
                           >{{this.billings.due_details.amount}}</v-input>
+
                           <v-input
                             prepend-icon="mdi-file-document"
                             color="black"

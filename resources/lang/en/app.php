@@ -34,20 +34,20 @@ return [
    | Homepage
    |--------------------------------------------------------------------------
    */
-  
+
   "home" => "Home",
   "home_page_title" => "Piggy Bank Loyalty",
   "home_tab1_title" => "Open a free Piggy Bank account now!",
   "home_tab1_desc" => "Collect loyalty points when you shop with our partner businesses. Launch the app, go to the Earn menu, show your QR-code or unique Customer Number to cashier to earn points.",
   "home_tab2_title" => "Redeem your points for cash discounts",
-  "home_tab2_desc" => "Loyalty points are worth real money. Redeem your points for instant cash discounts. Launch the app, go to the Wallet menu and select the business, enter the points value to generate a unique QR-code or a 4-digit confirmation code then show it to the cashier to process your duscount.",
+  "home_tab2_desc" => "Loyalty points are worth real money. Redeem your points for instant cash discounts. Launch the app, go to the Wallet menu and select the business, enter the points value to generate a unique QR-code or a 4-digit confirmation code then show it to the cashier to process your discount.",
   "home_tab3_title" => "Join the revolution!",
   "home_tab3_desc" => "Reward your customers with points. Give them a reason to come back. Get ahead of your competition. You and your existing staff are able to issue and reedem points in seconds without the need for any additional equipment. Our Loyalty Points program is easy to set up and use. It's free to get started!",
   "sign_up_to_earn" => "Open account",
   "my_wallet" => "My wallet",
   "sign_up_as_business" => "Register your business",
   "get_started_now" => "Open account",
-  
+
   /*
    |--------------------------------------------------------------------------
    | About
@@ -92,8 +92,8 @@ return [
   "forgot_password" => "Forgot password?",
   "sign_up" => "Sign up",
   "sign_up_consent" => "By clicking \"Sign up\", you agree to our Terms & Conditions and Privacy Policy.",
-  "server_error" => "Error. If the problem persists, please contact support at hello@piggybanksvg.com.",
-  "correct_errors" => "We found errors. Please contact website support at hello@piggybanksvg.com.",
+  "server_error" => "Error. If the problem persists, please contact support at piggybankloyalty@gmail.com.",
+  "correct_errors" => "We found errors. Please contact website support at piggybankloyalty@gmail.com.",
   "update_success" => "Updated successfully.",
   "i_agree_to_terms" => "I agree to the terms and conditions",
   "agree_to_terms" => "Agree to terms",
@@ -155,7 +155,7 @@ return [
   "contact_us" => "Contact us",
   "contact_paragraphs" => [
     "If you want more information or have any questions, please send an email to :app_contact_email. or you can also reach us via Whatsapp at 1-784-530-3260.",
-    
+
   ],
 
   /*

@@ -18,7 +18,7 @@
           <div>
             <p
               class="headline my-5"
-            >If you want more information or have any questions, please send an email to hello@piggybanksvg.com.</p>
+            >If you want more information or have any questions, please send an email to piggybankloyalty@gmail.com.</p>
             <p class="headline">
               You may also reach us via WhatsApp:
               <a href="https://wa.me/17845303260?text=Hello" target="_blank">+1-784-530-3260</a>

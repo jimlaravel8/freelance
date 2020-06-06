@@ -101,7 +101,7 @@
                               ref="form1.whatsapp"
                               id="form1.whatsapp"
                               :label="`Phone number`"
-                              :name="`whatsapp`"
+                              :name="`phone number`"
                               rules="required|min:1|max:32"
                               dense
                             />

@@ -7,7 +7,10 @@
             <v-card-text>
               <h3>{{this.points_earned}}</h3>
             </v-card-text>
-            <v-card-subtitle>Total points earned last 24h</v-card-subtitle>
+            <v-card-subtitle>
+                <p>Total points earned last 24h</p>
+                <p style="color: red">Total points issuance session</p>
+            </v-card-subtitle>
           </v-card>
         </v-col>
         <v-col cols="12" sm="6" md="6" lg="4" xl="3">
@@ -15,7 +18,10 @@
             <v-card-text>
               <h3>{{this.points_spent}}</h3>
             </v-card-text>
-            <v-card-subtitle>Total points spent last 24h</v-card-subtitle>
+            <v-card-subtitle>
+                <p>Total points spent last 24h</p>
+                <p style="color: red">Total points redemption sessions</p>
+            </v-card-subtitle>
           </v-card>
         </v-col>
         <v-col cols="12" sm="12" md="12" lg="4" xl="3">

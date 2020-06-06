@@ -119,7 +119,7 @@
                             v-model="form1.whatsapp"
                             ref="form1.whatsapp"
                             id="form1.whatsapp"
-                            :label="$auth.user().role === 2 ? 'Whatsapp' : 'Contact Number'"
+                            :label="$auth.user().role === 2 ? 'Phone Number' : 'Contact Number'"
                             rules="required|max:64"
                             dense
                           />

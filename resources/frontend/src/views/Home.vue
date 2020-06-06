@@ -39,12 +39,18 @@
                                         <p>Our app is available on android and ios platforms</p>
                                         <hr>
                                         <v-card-actions>
-                                            <a href="https://apps.apple.com/us/app/piggy-bank-svg/id1502265988" target="_blank">
-                                                <img src="/img/store/appstore.png" />
-                                            </a>
-                                            <a style="margin-left: 10px;" href="https://play.google.com/store/apps/details?id=com.piggy" target="_blank">
-                                                <img src="/img/store/playstore.png" />
-                                            </a>
+                                            <v-row>
+                                                <v-col cols="12" xs="3" lg="3">
+                                                    <a href="https://apps.apple.com/us/app/piggy-bank-svg/id1502265988" target="_blank">
+                                                        <img src="/img/store/appstore.png" />
+                                                    </a>
+                                                </v-col>
+                                                <v-col cols="12" xs="3" lg="3">
+                                                    <a href="https://play.google.com/store/apps/details?id=com.piggy" target="_blank">
+                                                        <img src="/img/store/playstore.png" />
+                                                    </a>
+                                                </v-col>
+                                            </v-row>
                                         </v-card-actions>
                                     </v-card>
                                 </v-col>

@@ -224,7 +224,7 @@
                     <div v-if="$init.app.social.length > 0">
                         <h3 class="title NavFg--text my-5" v-html="$t('follow_us')"></h3>
 
-                        <v-btn v-for="(item, i) in $init.app.social" :key="'social_' + i" icon color="NavFg" :href="item.url">
+                        <v-btn v-for="(item, i) in $init.app.social" :key="'social_' + i" icon color="NavFg" :href="item.url" target="_blank">
                             <v-icon>{{ item.icon }}</v-icon>
                         </v-btn>
                     </div>
@@ -233,12 +233,12 @@
             </v-row>
 
             <v-row>
-                <v-col cols="6" xs="3" lg="3" class=" offset-sm-6">
+                <v-col cols="12" xs="3" lg="3" class=" offset-sm-6">
                     <a href="https://apps.apple.com/us/app/piggy-bank-svg/id1502265988" target="_blank">
                         <img src="/img/store/appstore.png" />
                     </a>
                 </v-col>
-                <v-col cols="6" xs="3" lg="3">
+                <v-col cols="12" xs="3" lg="3">
                     <a href="https://play.google.com/store/apps/details?id=com.piggy" target="_blank">
                         <img src="/img/store/playstore.png" />
                     </a>
@@ -608,5 +608,8 @@ export default {
 .v-application--is-ltr .v-list-item__action:first-child,
 .v-application--is-ltr .v-list-item__icon:first-child {
     margin-right: 12px;
+}
+.v-menu__content--fixed {
+    max-height: 100vh !important;
 }
 </style>

@@ -100,8 +100,8 @@
                               v-model="form1.whatsapp"
                               ref="form1.whatsapp"
                               id="form1.whatsapp"
-                              :label="`Whatsapp`"
-                              :name="`whatsapp`"
+                              :label="`Phone Number`"
+                              :name="`phone_number`"
                               rules="required|min:1|max:32"
                               dense
                             />
