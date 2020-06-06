@@ -6,7 +6,7 @@
     @endcomponent
   @endslot
 
-  [![](https://piggybanksvg.com/img/logo.png)](https://piggybanksvg.com/ "PiggyBankSVG.COM | Happy Earnings :)")
+  [![](https://piggybanksvg.com/img/logo.png)](https://piggybanksvg.com/ "Piggy Bank Loyalty | Happy Earnings :)")
   # Hello {{$to_name}},
 
 <p>Here are the transactions for the month of {{$month}}</p>
@@ -38,6 +38,11 @@
 ### Squeeze Cash
 - Send XCD invoice amount to: SQ03017
  - Please include your invoice number(s)
+
+
+### Payswif:
+Send XCD invoice amount to: 17845303260
+Please include your invoice number(s)
 </div>
 <?php if ($cta_url !== null) { ?>
 

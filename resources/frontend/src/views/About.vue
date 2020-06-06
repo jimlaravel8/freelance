@@ -3,7 +3,7 @@
     <v-container class="pa-0">
       <v-img
         :src="tabImg"
-        :key="tabImg"
+        :key="tabImg" 
         :min-height="tabImgHeight"
         :aspect-ratio="tabImgAspectRation"
         transition="fade-transition"

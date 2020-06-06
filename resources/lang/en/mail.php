@@ -16,8 +16,11 @@ return [
   "reset_password_mail_top" => "You are receiving this email because we received a password reset request for your account. Please click the button below to set a new password.",
   "reset_password_mail_cta" => "Reset password",
   "reset_password_mail_bottom" => "If you did not request a password reset, no further action is required. This link is valid for 24 hours.",
-  
+
   // Registration greetings
-  "registration_welcome_mail_top" => "You've successfully registered to PiggyBankSVG.COM, enjoy your earnings :)",
+  "registration_welcome_mail_top" => "You've successfully registered to PiggyBankSVG.COM, enjoy your earnings :)</p>
+    If you need help please contact us at:
+    Email: hello@piggybanksvg.com
+    Whatsapp: 17845303260",
   "registration_welcome_mail_subject" => "PiggyBank.SVG Registration",
 ];

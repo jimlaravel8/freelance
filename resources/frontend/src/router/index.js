@@ -12,7 +12,7 @@ import Home from "../views/Home.vue";
 import i18n from "@/plugins/i18n";
 import { loadLanguageAsync } from "@/plugins/i18n";
 
-import store from "../store";
+import store from "../store";  
 
 var data = "";
 const routes = [

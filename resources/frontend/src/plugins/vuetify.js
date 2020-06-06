@@ -33,7 +33,7 @@ export default new Vuetify({
         ctaFg: '#000000',
         fg: '#ffffff',
         error: '#c50000'
-        
+
       },
     },
   },

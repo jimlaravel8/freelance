@@ -21,7 +21,7 @@
             >If you want more information or have any questions, please send an email to hello@piggybanksvg.com.</p>
             <p class="headline">
               You may also reach us via WhatsApp:
-              <a href="tel:1-784-500-0000">+1-784-500-0000</a>
+              <a href="https://wa.me/17845303260?text=Hello" target="_blank">+1-784-530-3260</a>
             </p>
           </div>
         </v-col>
@@ -30,3 +30,4 @@
   </div>
 </template>
 <script>
+

@@ -518,6 +518,10 @@ export default {
               label: this.$t("profile"),
               icon: "mdi-account-circle",
               to: { name: "settings.profile" }
+            },{
+              label: this.$t('get_help'),
+              icon: 'mdi-help',
+              to: {name: 'contact'}
             },
             {
               label: "Businesses",
@@ -549,6 +553,10 @@ export default {
               label: this.$t("profile"),
               icon: "mdi-account-circle",
               to: { name: "settings.profile" }
+            },{
+              label: this.$t('get_help'),
+              icon: 'mdi-help',
+              to: {name: 'contact'}
             }
           ];
         } else if (this.$auth.user().role === 3) {
@@ -585,6 +593,10 @@ export default {
               label: this.$t("profile"),
               icon: "mdi-account-circle",
               to: { name: "settings.profile" }
+            },{
+              label: this.$t('get_help'),
+              icon: 'mdi-help',
+              to: {name: 'contact'}
             },
             {
               label: this.$t("business"),
@@ -619,6 +631,10 @@ export default {
               label: this.$t("profile"),
               icon: "mdi-account-circle",
               to: { name: "settings.profile" }
+            },{
+              label: this.$t('get_help'),
+              icon: 'mdi-help',
+              to: {name: 'contact'}
             }
           ];
         }

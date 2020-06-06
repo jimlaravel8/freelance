@@ -516,4 +516,7 @@ return [
   "all_time" => "All time",
   "version" => "Version",
   "version_info" => "Your version of this app.",
+
+  'get_help' => 'Get Help',
+
 ];

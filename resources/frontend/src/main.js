@@ -12,7 +12,7 @@ import VueAxios from "vue-axios";
 import VueRouter from "vue-router";
 import axios from "./plugins/axios";
 import i18n from "@/plugins/i18n";
-import auth from "@/plugins/auth";
+import auth from "@/plugins/auth"; 
 import "@/plugins/moment";
 import "@/plugins/lodash";
 import "@/components/components";

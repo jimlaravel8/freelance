@@ -74,7 +74,7 @@
                           <v-input
                             prepend-icon="mdi-cash"
                             color="black"
-                            :messages="[`Amount Due | <Points Issurance Sessions> * XCD ${this.transaction_fee}`]"
+                            :messages="[`Amount Due | <Points Issurance Sessions> * USD ${this.transaction_fee}`]"
                           >{{this.billings.due_details.amount}}</v-input>
                           <v-input
                             prepend-icon="mdi-file-document"
@@ -104,6 +104,22 @@
                                 <v-list-item-title>Squeeze Cash</v-list-item-title>
                                 <v-list-item-subtitle>Send XCD invoice amount to: SQ03017</v-list-item-subtitle>
                                 <v-list-item-subtitle>Please include your invoice number(s)</v-list-item-subtitle>
+                              </v-list-item-content>
+                            </v-list-item>
+                            <v-list-item three-line>
+                              <v-list-item-content>
+                                <v-list-item-title>Pay by Paypal:</v-list-item-title>
+                                <v-list-item-subtitle>Go to <a href="https://www.paypal.me/caribbeanadventures" target="_blank">Paypal</a> </v-list-item-subtitle>
+                                <v-list-item-subtitle>Please send USD amount on invoice</v-list-item-subtitle>
+                                <v-list-item-subtitle>Please include your invoice number(s)</v-list-item-subtitle>
+                              </v-list-item-content>
+                            </v-list-item>
+                            <v-list-item three-line>
+                              <v-list-item-content>
+                                <v-list-item-title>Payswif:</v-list-item-title>
+                                <v-list-item-subtitle>Send XCD invoice amount to: 17845303260</v-list-item-subtitle>
+                                <v-list-item-subtitle>Please include your invoice number(s)</v-list-item-subtitle>
+                                <v-list-item-subtitle>Alternatively, we can arrange pickup.</v-list-item-subtitle>
                               </v-list-item-content>
                             </v-list-item>
                           </v-list>
