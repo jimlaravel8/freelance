@@ -36,6 +36,16 @@
                                             <v-btn v-if="$auth.check() && $auth.user().role == 2" class="mt-5 no-caps" color="ctaBg ctaFg--text" x-large tile depressed :to="{ name: 'customer.earn' }">{{ $t('earn_points') }}</v-btn>
                                             <v-btn v-if="$auth.check() && ($auth.user().role == 3 || $auth.user().role == 4)" class="mt-5 no-caps" color="ctaBg ctaFg--text" x-large tile depressed :to="{ name: 'business.issue-points' }">{{ $t('issue_points') }}</v-btn>
                                         </v-card-text>
+                                        <p>Our app is available on android and ios platforms</p>
+                                        <hr>
+                                        <v-card-actions>
+                                            <a href="https://apps.apple.com/us/app/piggy-bank-svg/id1502265988" target="_blank">
+                                                <img src="/img/store/appstore.png" />
+                                            </a>
+                                            <a style="margin-left: 10px;" href="https://play.google.com/store/apps/details?id=com.piggy" target="_blank">
+                                                <img src="/img/store/playstore.png" />
+                                            </a>
+                                        </v-card-actions>
                                     </v-card>
                                 </v-col>
                             </v-row>
@@ -53,16 +63,6 @@
                                             <v-btn v-if="$auth.check() && $auth.user().role == 2" class="mt-5 no-caps" color="ctaBg ctaFg--text" x-large tile depressed :to="{ name: 'customer.wallet' }">{{ $t('my_wallet') }}</v-btn>
                                             <v-btn v-if="$auth.check() && ($auth.user().role == 3 || $auth.user().role == 4)" class="mt-5 no-caps" color="ctaBg ctaFg--text" x-large tile depressed :to="{ name: 'business.redeem-points' }">{{ $t('redeem_points') }}</v-btn>
                                         </v-card-text>
-                                        <p>Our app is available on android and ios platforms</p>
-                                        <hr>
-                                        <v-card-actions>
-                                            <a href="https://apps.apple.com/us/app/piggy-bank-svg/id1502265988" target="_blank">
-                                                <img src="/img/store/appstore.png" />
-                                            </a>
-                                            <a style="margin-left: 10px;" href="https://play.google.com/store/apps/details?id=com.piggy" target="_blank">
-                                                <img src="/img/store/playstore.png" />
-                                            </a>
-                                        </v-card-actions>
                                     </v-card>
                                 </v-col>
                             </v-row>
