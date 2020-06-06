@@ -878,7 +878,8 @@ class User extends Authenticatable implements JWTSubject, HasLocalePreference, H
           'points_available' => $event->points - $event->points_used,
           'points_value' => $event->points * $event->point_value,
           'purchase_amount' => $event->purchase_amount / intval(str_pad('1', $business['currency_fraction_digits'] + 1, '0')),
-          'created_at' => $event->created_at->timezone($this->getTimezone())->format('Y-m-d H:i:s'),
+          'created_at' => $event->created_at->timezone($this->getTimezone())->diffForHumans(),
+        //   'created_at' => $event->created_at->timezone($this->getTimezone())->format('Y-m-d H:i:s'),
           'expires_at' => ($event->expires_at !== null) ? $event->expires_at->timezone($this->getTimezone())->format('Y-m-d H:i:s') : null,
           'expired' => ($event->expires_at !== null) ? $event->expires_at->timezone($this->getTimezone())->isPast() : false
         ];
@@ -918,7 +919,7 @@ class User extends Authenticatable implements JWTSubject, HasLocalePreference, H
             $redeemed += $redeem;
             $point_value = $event->point_value;
             $point_value = $event->point_value;
-          } 
+          }
         }
 
         if ($redeemed == $points) {

@@ -21,14 +21,14 @@ class CustomersController extends \App\Http\Controllers\Controller
     |--------------------------------------------------------------------------
     |
     | This controller is responsible for handling customer related
-    | features. 
+    | features.
     |
     */
 
     /**
      * Get wallet for user.
      *
-     * @return \Symfony\Component\HttpFoundation\Response 
+     * @return \Symfony\Component\HttpFoundation\Response
      */
     public function getWallet(Request $request) {
       return response()->json([
@@ -40,7 +40,7 @@ class CustomersController extends \App\Http\Controllers\Controller
     /**
      * Get card from wallet for user.
      *
-     * @return \Symfony\Component\HttpFoundation\Response 
+     * @return \Symfony\Component\HttpFoundation\Response
      */
     public function getCard(Request $request) {
       $uuid = $request->uuid;
@@ -54,7 +54,7 @@ class CustomersController extends \App\Http\Controllers\Controller
     /**
      * Generate 4-digit discount code.
      *
-     * @return \Symfony\Component\HttpFoundation\Response 
+     * @return \Symfony\Component\HttpFoundation\Response
      */
     public function postGenerateDiscountCode(Request $request) {
       $uuid = $request->uuid;

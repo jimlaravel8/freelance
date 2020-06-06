@@ -141,10 +141,14 @@
                                     >{{ $t('points_expired', { points: formatNumber(item.points_available) }) }}</span>
                                   </div>
                                 </v-col>
+                                <!-- <v-col
+                                  class="text-right caption"
+                                  cols="4"
+                                >{{ formatDate(item.created_at, 'ago') }}</v-col> -->
                                 <v-col
                                   class="text-right caption"
                                   cols="4"
-                                >{{ formatDate(item.created_at, 'ago') }}</v-col>
+                                >{{ item.created_at }}</v-col>
                               </v-row>
                             </v-timeline-item>
                           </v-timeline>
