@@ -151,7 +151,7 @@ export default {
 <style scoped>
 .v-application .mt-0 {
     /* margin-top: 0!important; */
-    height: 50vh !important;
+    height: 35vh !important;
     width: 66% !important;
 }
 </style>
