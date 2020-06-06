@@ -30,6 +30,8 @@
               <h3>{{this.total_businesses}}</h3>
             </v-card-text>
             <v-card-subtitle>Total Businesses registered.</v-card-subtitle>
+            <br>
+            <br>
           </v-card>
         </v-col>
       </v-row>
