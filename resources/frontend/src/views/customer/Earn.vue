@@ -62,11 +62,13 @@
                             @click:append="copyStringToClipboard($auth.user().customer_number)"
                           ></v-text-field>
                         </div>
+                        <div style="text-align:center !important">
                         <qrcode
                           class="mt-0"
                           :value="$init.config.schemeAndHost + '/business/issue-points?c=' + $auth.user().customer_number"
-                          :options="{ margin:0, width: 220, errorCorrectionLevel: 'H', color: { light: '#ffffff00', dark: ($vuetify.theme.dark) ? '#ffffff' : '#000000' } }"
+                          :options="{ marginLeft: 10, width: 220, errorCorrectionLevel: 'H', color: { light: '#ffffff00', dark: ($vuetify.theme.dark) ? '#ffffff' : '#000000' } }"
                         ></qrcode>
+                        </div>
                       </v-card-text>
                     </v-card>
                   </v-col>
