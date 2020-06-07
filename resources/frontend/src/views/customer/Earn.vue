@@ -62,7 +62,7 @@
                             @click:append="copyStringToClipboard($auth.user().customer_number)"
                           ></v-text-field>
                         </div>
-                        <qrcode
+                        <qrcode style="height: 240px !important;width: 250px !important;"
                           class="mt-0"
                           :value="$init.config.schemeAndHost + '/business/issue-points?c=' + $auth.user().customer_number"
                           :options="{ margin:0, width: 180, errorCorrectionLevel: 'H', color: { light: '#ffffff00', dark: ($vuetify.theme.dark) ? '#ffffff' : '#000000' } }"
@@ -148,11 +148,3 @@ export default {
 };
 </script>
 
-<style scoped>
-.v-application .mt-0 {
-    /* margin-top: 0!important; */
-    /* height: 35vh !important; */
-    width: 100% !important;
-}
-
-</style>

@@ -71,7 +71,7 @@ class StatisticsController extends \App\Http\Controllers\Controller
             $redeemed->toArray(),
             ['total_businesses' => Business::count()],
             ['count_issuance' => $count_issuance],
-            ['count_redemption' => $count_redemption],
+            ['count_redemption' => $count_redemption]
         );
     }
 

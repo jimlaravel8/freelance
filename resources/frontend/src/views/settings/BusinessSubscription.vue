@@ -74,7 +74,7 @@
                           <v-input
                             prepend-icon="mdi-cash"
                             color="black"
-                            :messages="['']"
+                            :messages="[`Amount Due`]"
                           >{{this.billings.due_details.amount}}</v-input>
 
                           <v-input

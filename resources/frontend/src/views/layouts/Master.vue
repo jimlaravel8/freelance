@@ -233,12 +233,12 @@
             </v-row>
 
             <v-row>
-                <v-col cols="12" xs="3" lg="3" class=" offset-sm-6">
+                <v-col cols="12" xs="6" lg="6" class="offset-sm-6">
                     <a href="https://apps.apple.com/us/app/piggy-bank-svg/id1502265988" target="_blank">
                         <img src="/img/store/appstore.png" />
                     </a>
                 </v-col>
-                <v-col cols="12" xs="3" lg="3">
+                <v-col cols="12" xs="6" lg="6" class="offset-sm-6">
                     <a href="https://play.google.com/store/apps/details?id=com.piggy" target="_blank">
                         <img src="/img/store/playstore.png" />
                     </a>
