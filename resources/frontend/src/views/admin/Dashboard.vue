@@ -9,7 +9,7 @@
             </v-card-text>
             <v-card-subtitle>
                 <p>Total points earned last 24h</p>
-                <p style="color: red">Total points issuance session</p>
+                <p style="color: red">Total points issuance session: {{ this.count_issuance }}</p>
             </v-card-subtitle>
           </v-card>
         </v-col>
@@ -20,7 +20,7 @@
             </v-card-text>
             <v-card-subtitle>
                 <p>Total points spent last 24h</p>
-                <p style="color: red">Total points redemption sessions</p>
+                <p style="color: red">Total points redemption sessions: {{ this.count_redemption }}</p>
             </v-card-subtitle>
           </v-card>
         </v-col>
@@ -199,6 +199,8 @@ export default {
 
       this.points_earned = parseInt(data[0].points_earned) || 0;
       this.points_spent = parseInt(data[1].points_spent) || 0;
+      this.count_issuance = parseInt(data.count_issuance) || 0;
+      this.count_redemption = parseInt(data.count_redemption) || 0;
       this.total_businesses = parseInt(data.total_businesses) || 0;
 
       this.loading = false;

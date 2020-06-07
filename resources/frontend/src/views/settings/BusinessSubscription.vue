@@ -74,7 +74,7 @@
                           <v-input
                             prepend-icon="mdi-cash"
                             color="black"
-                            :messages="[`Amount Due | * XCD ${this.transaction_fee}`]"
+                            :messages="['']"
                           >{{this.billings.due_details.amount}}</v-input>
 
                           <v-input
@@ -120,7 +120,7 @@
                                 <v-list-item-title>Payswif:</v-list-item-title>
                                 <v-list-item-subtitle>Send XCD invoice amount to: 17845303260</v-list-item-subtitle>
                                 <v-list-item-subtitle>Please include your invoice number(s)</v-list-item-subtitle>
-                                <v-list-item-subtitle>Alternatively, we can arrange pickup.</v-list-item-subtitle>
+                                <!-- <v-list-item-subtitle>Alternatively, we can arrange pickup.</v-list-item-subtitle> -->
                               </v-list-item-content>
                             </v-list-item>
                           </v-list>

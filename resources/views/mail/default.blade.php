@@ -24,7 +24,8 @@
 <?php } ?>
 
 <?php if($md_enabled == "points_redeemed"){ ?>
-  Congrats **{{ $customer_name }}**! You successfully redeemed **{{ $points }}** points from **XCD{{round($purchase_amount/2.67, 3)}}** discount at **{{ $business_name }}**.
+  Congrats **{{ $customer_name }}**! You successfully redeemed **{{ $points }}** points from **{{ $business_name }}**.
+  {{-- Congrats **{{ $customer_name }}**! You successfully redeemed **{{ $points }}** points from **XCD{{round($purchase_amount/2.67, 3)}}** discount at **{{ $business_name }}**. --}}
 <?php } ?>
 
   @slot('footer')

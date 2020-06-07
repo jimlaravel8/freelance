@@ -18,9 +18,9 @@ return [
   "reset_password_mail_bottom" => "If you did not request a password reset, no further action is required. This link is valid for 24 hours.",
 
   // Registration greetings
-  "registration_welcome_mail_top" => "You've successfully registered to Piggy Bank Loyalty, enjoy your earnings :)
-    If you need help please contact us at:
-    Email: piggybankloyalty@gmail.com
+  "registration_welcome_mail_top" => "You've successfully registered to Piggy Bank Loyalty, enjoy your earnings :) \n
+    If you need help please contact us at: \r
+    Email: piggybankloyalty@gmail.com \r
     Whatsapp: 17845303260",
-  "registration_welcome_mail_subject" => "PiggyBank.SVG Registration",
+  "registration_welcome_mail_subject" => "Piggy Bank Loyalty Registration",
 ];
