@@ -95,31 +95,31 @@
                             <v-list-item three-line>
                               <v-list-item-content>
                                 <v-list-item-title>Pay by Check</v-list-item-title>
-                                <v-list-item-subtitle>Make check payable to: Piggy Bank Loyalty</v-list-item-subtitle>
-                                <v-list-item-subtitle>Mail check to: Kingstown, St Vincent & the Grenadines</v-list-item-subtitle>
-                                <v-list-item-subtitle>Alternatively, we can arrange pickup.</v-list-item-subtitle>
+                                <p>Make check payable to: Piggy Bank Loyalty</p>
+                                <p>Mail check to: Kingstown, St Vincent & the Grenadines</p>
+                                <p>Alternatively, we can arrange pickup.</p>
                               </v-list-item-content>
                             </v-list-item>
                             <v-list-item two-line>
                               <v-list-item-content>
                                 <v-list-item-title>Squeeze Cash</v-list-item-title>
-                                <v-list-item-subtitle>Send XCD invoice amount to: SQ03017</v-list-item-subtitle>
-                                <v-list-item-subtitle>Please include your invoice number(s)</v-list-item-subtitle>
+                                <p>Send XCD invoice amount to: SQ03017</p>
+                                <p>Please include your invoice number(s)</p>
                               </v-list-item-content>
                             </v-list-item>
                             <v-list-item three-line>
                               <v-list-item-content>
                                 <v-list-item-title>Pay by Paypal:</v-list-item-title>
-                                <v-list-item-subtitle>Go to <a href="https://www.paypal.me/caribbeanadventures" target="_blank">Paypal</a> </v-list-item-subtitle>
-                                <v-list-item-subtitle>Please send USD amount on invoice</v-list-item-subtitle>
-                                <v-list-item-subtitle>Please include your invoice number(s)</v-list-item-subtitle>
+                                <p>Go to <a href="https://www.paypal.me/caribbeanadventures" target="_blank">Paypal</a> </p>
+                                <p>Please send USD amount on invoice</p>
+                                <p>Please include your invoice number(s)</p>
                               </v-list-item-content>
                             </v-list-item>
                             <v-list-item three-line>
                               <v-list-item-content>
                                 <v-list-item-title>Payswif:</v-list-item-title>
-                                <v-list-item-subtitle>Send XCD invoice amount to: 17845303260</v-list-item-subtitle>
-                                <v-list-item-subtitle>Please include your invoice number(s)</v-list-item-subtitle>
+                                <p>Send XCD invoice amount to: 17845303260</p>
+                                <p>Please include your invoice number(s)</p>
                                 <!-- <v-list-item-subtitle>Alternatively, we can arrange pickup.</v-list-item-subtitle> -->
                               </v-list-item-content>
                             </v-list-item>
@@ -467,5 +467,9 @@ export default {
 
 .input-group--disabled.input-group--select label {
   color: #000 !important;
+}
+.v-list-item__subtitle,
+.v-list-item__title {
+    white-space: break-spaces !important;
 }
 </style>
