@@ -404,6 +404,9 @@ class AuthController extends \App\Http\Controllers\Controller
      */
     public function postUpdateProfile(Request $request)
     {
+        // return auth()->user();
+        // return ;
+
         $locale = request('language', config('default.language'));
         app()->setLocale($locale);
 
@@ -426,7 +429,7 @@ class AuthController extends \App\Http\Controllers\Controller
                 'whatsapp.min' => 'The phone number must be at least 10 characters.',
                 'whatsapp.regex' => 'The phone number format is invalid.',
                 'whatsapp.required' => 'The phone number is required.',
-                'whatsapp.max' => 'The phone number must be at most 11 characters.' 
+                'whatsapp.max' => 'The phone number must be at most 11 characters.'
             ]
 
         );
@@ -445,12 +448,12 @@ class AuthController extends \App\Http\Controllers\Controller
                 'errors' => ['current_password' => [trans('app.current_password_incorrect')]]
             ], 422);
         }
-
         // All good, update profile
         auth()->user()->first_name = $request->first_name;
         auth()->user()->last_name = $request->last_name;
         auth()->user()->email = $request->email;
         auth()->user()->whatsapp = $request->whatsapp;
+        auth()->user()->phone = $request->whatsapp;
         // auth()->user()->timezone = $request->timezone;
         auth()->user()->location = $request->location;
         auth()->user()->locale = $request->locale;
@@ -461,7 +464,11 @@ class AuthController extends \App\Http\Controllers\Controller
         if ($request->new_password !== null && $request->new_password != 'null') auth()->user()->password = bcrypt($request->new_password);
 
         auth()->user()->save();
-
+        if (auth()->user()->role == 3) {
+            auth()->user()->business->phone = auth()->user()->whatsapp;
+            auth()->user()->business->email = auth()->user()->email;
+            auth()->user()->business->save();
+        }
         // Update avatar
         if (json_decode($request->avatar_media_changed) === true) {
             $file = $request->file('avatar');
