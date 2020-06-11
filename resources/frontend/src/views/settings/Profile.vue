@@ -58,7 +58,7 @@
                                                         <x-text-field v-model="form1.last_name" ref="form1.last_name" id="form1.last_name" :label="$t('last_name')" :name="$t('last_name')" rules="required|min:1|max:32" dense />
                                                     </v-col>
                                                 </v-row>
-                                                <x-text-field v-model="form1.whatsapp" ref="form1.whatsapp" id="form1.whatsapp" :label="$auth.user().role === 2 ? 'Phone Number' : 'Contact Number'" rules="required|max:64" dense />
+                                                <x-text-field v-model="form1.whatsapp" ref="form1.whatsapp" id="form1.whatsapp" :label="$auth.user().role === 2 ? 'Phone Number' : 'Contact Number'" rules="required|min:11|max:11" dense />
                                                 <x-text-field type="email" v-model="form1.email" ref="form1.email" id="form1.email" :label="$t('email')" rules="required|max:64|email" dense />
                                             </v-col>
                                         </v-row>

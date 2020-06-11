@@ -89,11 +89,11 @@
                                   v-model="verifyCustomerNumberForm.customerNumber"
                                   id="verifyCustomerNumberForm.customerNumber"
                                   ref="verifyCustomerNumberForm.customerNumber"
-                                  rules="required|min:15|max:15"
+                                  rules="required|min:14|max:14"
                                   class="title"
                                   outlined
-                                  v-mask="'###-###-###-###'"
-                                  placeholder="###-###-###-###"
+                                  v-mask="'##-###-###-###'"
+                                  placeholder="##-###-###-###"
                                 />
                               </v-col>
                               <v-col cols="4">

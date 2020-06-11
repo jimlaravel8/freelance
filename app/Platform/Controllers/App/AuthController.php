@@ -52,12 +52,12 @@ class AuthController extends \App\Http\Controllers\Controller
                 'email' => 'required|email|max:64|unique:users',
                 'password' => 'required|min:8|max:24',
                 // 'whatsapp' => 'required|regex:/\D*([2-9]\d{2})(\D*)([2-9]\d{2})(\D*)(\d{4})\D*/|min:6|max:7'
-                'whatsapp' => 'required|regex:/^[0-9]+$/|min:6|max:7'
+                'whatsapp' => 'required|regex:/^[0-9]+$/|size:7'
             ], [
                 'whatsapp.regex' => 'A correct phone number should look like this: 17842220000 or 7842220000',
                 // 'whatsapp.min' => 'A correct phone number should look like this: 17842220000 or 7842220000',
-                'whatsapp.min' => 'The phone number must be at least 10 characters.',
-                'whatsapp.max' => 'The phone number must be at most 11 characters.',
+                'whatsapp.size' => 'The phone number must be exactly 11 characters.',
+                // 'whatsapp.max' => 'The phone number must be at most 11 characters.',
             ]);
         } elseif ($type == 'business') {
             $role = 3;
@@ -69,7 +69,7 @@ class AuthController extends \App\Http\Controllers\Controller
                 'email' => 'required|email|max:64|unique:users',
                 'password' => 'required|min:5|max:24',
                 // 'whatsapp' => 'required|regex:/^([0-9\s\-\+\(\)]*)$/|min:10',
-                'phone' => 'required|regex:/^[0-9]+$/|min:6|max:7',
+                'phone' => 'required|regex:/^[0-9]+$/|size:7',
                 // 'phone' => 'required|regex:/\D*([2-9]\d{2})(\D*)([2-9]\d{2})(\D*)(\d{4})\D*/|min:10|max:11',
                 'cid' => 'required|exists:business_categories,id'
             ], [
@@ -438,13 +438,13 @@ class AuthController extends \App\Http\Controllers\Controller
                 'email' => ['required', 'email', 'max:64', Rule::unique('users')->where(function ($query) {
                     return $query->where('id', '<>', auth()->user()->id);
                 })],
-                'whatsapp' => 'required|regex:/^([0-9\s\-\+\(\)]*)$/|min:10|max:11'
+                'whatsapp' => 'required|regex:/^([0-9\s\-\+\(\)]*)$/|size:11'
             ],
             [
-                'whatsapp.min' => 'The phone number must be at least 10 characters.',
+                'whatsapp.size' => 'The phone number must be exactly 11 characters.',
                 'whatsapp.regex' => 'The phone number format is invalid.',
                 'whatsapp.required' => 'The phone number is required.',
-                'whatsapp.max' => 'The phone number must be at most 11 characters.'
+                // 'whatsapp.max' => 'The phone number must be at most 11 characters.'
             ]
 
         );
@@ -546,7 +546,7 @@ class AuthController extends \App\Http\Controllers\Controller
     {
         $user = User::withoutGlobalScopes()->where('id', Auth::user()->id)->where('active', 1)->firstOrFail();
 
-        $number = "1234567890";
+        $number = $user->whatsapp;
         $length = Str::length($number);
         if ($length == 10) {
             $formatted_number = "$number[0]-$number[1]$number[2]$number[3]-$number[4]$number[5]$number[6]-$number[7]$number[8]$number[9]";

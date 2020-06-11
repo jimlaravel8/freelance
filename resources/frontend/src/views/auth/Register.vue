@@ -42,7 +42,7 @@
                                                         </v-col>
                                                     </v-row>
                                                     <x-autocomplete v-model="form1.location" :items="locations" item-value="0" item-text="1" label="Location" name="location" rules="required" :persistent-hint="false" dense @change="enter_code" />
-                                                    <x-text-field :prefix="form1.country_code" v-model="form1.whatsapp" ref="form1.whatsapp" id="form1.whatsapp" :label="`Phone number`" :name="`phone number`" rules="required|min:5|max:7" dense type="number" />
+                                                    <x-text-field :prefix="form1.country_code" v-model="form1.whatsapp" ref="form1.whatsapp" id="form1.whatsapp" :label="`Phone number`" :name="`phone number`" rules="required|min:7|max:7" dense type="number" />
                                                     <x-text-field type="email" v-model="form1.email" ref="form1.email" id="form1.email" :label="$t('email')" :name="$t('email')" rules="required|max:64|email" dense />
                                                     <x-password v-model="form1.password" ref="form1.password" id="form1.password" :label="$t('password')" :name="$t('password')" rules="required|min:8|max:24" dense />
                                                     <v-btn color="ctaBg ctaFg--text" class="no-caps mb-3" x-large tile depressed block :loading="form1.loading" :disabled="form1.loading || invalid" type="submit">

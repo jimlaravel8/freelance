@@ -55,7 +55,7 @@
                                                         </v-col>
                                                     </v-row>
                                                     <x-text-field type="email" v-model="form1.email" ref="form1.email" id="form1.email" :label="$t('email')" :name="$t('email')" rules="required|max:64|email" dense />
-                                                    <x-text-field :prefix="form1.country_code" v-model="form1.phone" ref="form1.phone" id="form1.phone" :label="`Contact Number`" :name="`phone`" rules="required|min:1|max:32" dense />
+                                                    <x-text-field :prefix="form1.country_code" v-model="form1.phone" ref="form1.phone" id="form1.phone" :label="`Contact Number`" :name="`phone`" rules="required|min:7|max:7" dense />
                                                     <x-autocomplete v-model="form1.cid" ref="form1.cid" id="form1.cid" :loading="loading2" :items="categories" item-value="cid" item-text="name" :label="'Business Category'" :name="'Business Category'" rules="required" dense />
                                                     <x-password v-model="form1.password" ref="form1.password" id="form1.password" :label="$t('password')" :name="$t('password')" rules="required|min:8|max:24" dense />
                                                     <v-btn color="ctaBg ctaFg--text" class="no-caps mb-3" x-large tile depressed block :loading="form1.loading" :disabled="form1.loading || invalid" type="submit">

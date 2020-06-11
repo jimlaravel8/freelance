@@ -25,14 +25,14 @@ class BusinessesController extends \App\Http\Controllers\Controller
     |--------------------------------------------------------------------------
     |
     | This controller is responsible for handling business related
-    | features. 
+    | features.
     |
     */
 
     /**
      * Get business details for settings.
      *
-     * @return \Symfony\Component\HttpFoundation\Response 
+     * @return \Symfony\Component\HttpFoundation\Response
      */
     public function getSettings(Request $request) {
       $locale = request('locale', config('default.language'));
@@ -43,11 +43,11 @@ class BusinessesController extends \App\Http\Controllers\Controller
         'business' => auth()->user()->getBusiness()
       ], 200);
     }
-  
+
     /**
      * Update settings.
      *
-     * @return \Symfony\Component\HttpFoundation\Response 
+     * @return \Symfony\Component\HttpFoundation\Response
      */
     public function postSettings(Request $request) {
       $locale = request('language', config('default.language'));
@@ -105,7 +105,7 @@ class BusinessesController extends \App\Http\Controllers\Controller
     /**
      * Get wallet for user.
      *
-     * @return \Symfony\Component\HttpFoundation\Response 
+     * @return \Symfony\Component\HttpFoundation\Response
      */
     public function getWallet(Request $request) {
       return response()->json([
@@ -117,14 +117,15 @@ class BusinessesController extends \App\Http\Controllers\Controller
     /**
      * Verify a customer number.
      *
-     * @return \Symfony\Component\HttpFoundation\Response 
+     * @return \Symfony\Component\HttpFoundation\Response
      */
     public function postVerifyCustomerNumber(Request $request) {
+        // return $request->all();
       $locale = request('locale', config('default.language'));
       app()->setLocale($locale);
 
       $v = Validator::make($request->all(), [
-        'customerNumber' => 'required|min:15|max:15'
+        'customerNumber' => 'required|size:14'
       ]);
 
       if ($v->fails()) {
@@ -133,8 +134,9 @@ class BusinessesController extends \App\Http\Controllers\Controller
           'errors' => $v->errors()
         ], 422);
       }
+      $phone_no = str_replace('-', '', $request->customerNumber);
 
-      $customer = User::where('customer_number', $request->customerNumber)->where('active', 1)->first();
+      $customer = User::where('whatsapp', $phone_no)->where('active', 1)->first();
 
       if (!$customer) {
         return response()->json([
@@ -151,14 +153,15 @@ class BusinessesController extends \App\Http\Controllers\Controller
     /**
      * Issue points with customer number.
      *
-     * @return \Symfony\Component\HttpFoundation\Response 
+     * @return \Symfony\Component\HttpFoundation\Response
      */
     public function postIssueAmount(Request $request) {
+        // return $request->all();
       $locale = request('locale', config('default.language'));
       app()->setLocale($locale);
 
       $v = Validator::make($request->all(), [
-        'customerNumber' => 'required|min:15|max:15',
+        'customerNumber' => 'required|size:14',
         'amount' => 'required|between:1,100000'
       ]);
 
@@ -168,8 +171,9 @@ class BusinessesController extends \App\Http\Controllers\Controller
           'errors' => $v->errors()
         ], 422);
       }
+      $phone_no = str_replace('-', '', $request->customerNumber);
 
-      $customer = User::where('customer_number', $request->customerNumber)->where('active', 1)->first();
+      $customer = User::where('whatsapp', $phone_no)->where('active', 1)->first();
       $business = auth()->user()->getBusiness(true);
       $businessName = $business['name'];
       if (!$customer) {
@@ -180,7 +184,7 @@ class BusinessesController extends \App\Http\Controllers\Controller
       } else {
         $amount = str_replace(',', '.', $request->amount);
         $points = (int) $amount * (int) $business['points_per_currency'];
-        
+
         if (intval($points) < intval($business['min_points_per_purchase'])) $points = $business['min_points_per_purchase'];
         if (intval($points) > intval($business['max_points_per_purchase'])) $points = $business['max_points_per_purchase'];
 
@@ -217,7 +221,7 @@ class BusinessesController extends \App\Http\Controllers\Controller
         $email->points = $points;
         $email->customer_name = $customer->name;
         $email->business_name = $businessName;
-        
+
         Mail::send(new \App\Mail\SendMail($email));
         // Monthly transactions paid/unpaid..
         $exists = \DB::table('business_payment_transactions')->where('user_id', $business['id'])
@@ -231,10 +235,10 @@ class BusinessesController extends \App\Http\Controllers\Controller
             'month' => Carbon::now(),
             'paid' => 0,
             'invoice_no' => 'PGB-#' . sprintf('%09d', ($latest + 1)),
-            
+
           ]);
         }
-        
+
 
         return response()->json([
           'status' => 'success',
@@ -248,7 +252,7 @@ class BusinessesController extends \App\Http\Controllers\Controller
     /**
      * Verify a customer redemption code.
      *
-     * @return \Symfony\Component\HttpFoundation\Response 
+     * @return \Symfony\Component\HttpFoundation\Response
      */
     public function postVerifyRedemptionCode(Request $request) {
       $locale = request('locale', config('default.language'));
@@ -288,7 +292,7 @@ class BusinessesController extends \App\Http\Controllers\Controller
     /**
      * Process a customer redemption code.
      *
-     * @return \Symfony\Component\HttpFoundation\Response 
+     * @return \Symfony\Component\HttpFoundation\Response
      */
     public function postProcessRedemptionCode(Request $request) {
       $locale = request('locale', config('default.language'));
@@ -307,7 +311,7 @@ class BusinessesController extends \App\Http\Controllers\Controller
 
       $business = auth()->user()->getBusiness(true);
       $code = Code::where('business_id', $business['business_id'])->where('code', $request->code)->where('expires_at', '>=', Carbon::now())->first();
-      
+
       if (!$code) {
         return response()->json([
           'status' => 'error',
@@ -321,7 +325,7 @@ class BusinessesController extends \App\Http\Controllers\Controller
         if ($redeem['success']) {
           // Add history
           $history = new History;
-          
+
           $history->user_id = $code->user_id;
           $history->business_id = $code->business_id;
           $history->customer_id = $customer->id;
@@ -336,7 +340,7 @@ class BusinessesController extends \App\Http\Controllers\Controller
 
           $history->save();
 
-          
+
           // Send a mail to the customer.
           $email = new \stdClass();
           // $email->purchase_amount = (int) $code->points * (float) $business['point_value'] / (float) 2.67;
@@ -353,7 +357,7 @@ class BusinessesController extends \App\Http\Controllers\Controller
           Mail::send(new \App\Mail\SendMail($email));
           // Delete code
           $code->delete();
-          
+
           return response()->json([
             'status' => 'success',
             'redeem' => $redeem
@@ -370,7 +374,7 @@ class BusinessesController extends \App\Http\Controllers\Controller
     /**
      * Update business rules.
      *
-     * @return \Symfony\Component\HttpFoundation\Response 
+     * @return \Symfony\Component\HttpFoundation\Response
      */
     public function postUpdateRules(Request $request) {
       $locale = request('locale', config('default.language'));
@@ -422,7 +426,7 @@ class BusinessesController extends \App\Http\Controllers\Controller
     /**
      * Get transactions.
      *
-     * @return \Symfony\Component\HttpFoundation\Response 
+     * @return \Symfony\Component\HttpFoundation\Response
      */
     public function getTransactions(Request $request) {
       $staff = auth()->user();
@@ -448,11 +452,11 @@ class BusinessesController extends \App\Http\Controllers\Controller
 
       return response()->json($transactions, 200);
     }
-    
+
     /**
      * Get `active` businesses by `alphabetic order`.
-     * 
-     * @return \Symfony\Component\HttpFoundation\Response 
+     *
+     * @return \Symfony\Component\HttpFoundation\Response
      */
     public function getBusinessesByAlphabeticOrder() {
       $businesses = Business::where('active', 1)
@@ -463,7 +467,7 @@ class BusinessesController extends \App\Http\Controllers\Controller
 
     /**
      * Return all transactions & total due grouped by month.
-     * 
+     *
      * @return \Symfony\Component\HttpFoundation\Response
      */
     public function getAllTransactions() {

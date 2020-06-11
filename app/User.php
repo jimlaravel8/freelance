@@ -738,7 +738,7 @@ class User extends Authenticatable implements JWTSubject, HasLocalePreference, H
 
       $business = [
         'id' => $user->business->id,
-        'uuid' => $user->business->uuid,
+        'uuid' => $user->business->id,
         'cover' => $user->business->cover,
         'name' => $user->business->name,
         'transaction_fee' => $user->business->transaction_fee,
