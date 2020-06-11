@@ -57,15 +57,15 @@
                             outlined
                             readonly
                             id="customerNumber"
-                            :value="$auth.user().customer_number"
+                            :value="$auth.user().phone_no"
                             append-icon="mdi-content-copy"
-                            @click:append="copyStringToClipboard($auth.user().customer_number)"
+                            @click:append="copyStringToClipboard($auth.user().phone_no)"
                           ></v-text-field>
                         </div>
                         <div style="text-align:center !important">
                         <qrcode
                           class="mt-0"
-                          :value="$init.config.schemeAndHost + '/business/issue-points?c=' + $auth.user().customer_number"
+                          :value="$init.config.schemeAndHost + '/business/issue-points?c=' + $auth.user().phone_no"
                           :options="{ marginLeft: 10, width: 220, errorCorrectionLevel: 'H', color: { light: '#ffffff00', dark: ($vuetify.theme.dark) ? '#ffffff' : '#000000' } }"
                         ></qrcode>
                         </div>

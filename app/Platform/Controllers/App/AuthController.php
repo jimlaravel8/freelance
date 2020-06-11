@@ -36,9 +36,12 @@ class AuthController extends \App\Http\Controllers\Controller
      */
     public function register(Request $request)
     {
+        // return $request->all();
+        // $data = $request->all();
         $locale = request('locale', config('default.language'));
         app()->setLocale($locale);
-
+        // $data['whatsapp'] = $request->country_code . $request->whatsapp;
+        // var_dump($data);
         $type = request('type', 'customer');
         $role = 2;
 
@@ -48,10 +51,11 @@ class AuthController extends \App\Http\Controllers\Controller
                 'last_name' => 'required|min:1|max:32',
                 'email' => 'required|email|max:64|unique:users',
                 'password' => 'required|min:8|max:24',
-                'whatsapp' => 'required|regex:/\D*([2-9]\d{2})(\D*)([2-9]\d{2})(\D*)(\d{4})\D*/|min:10|max:11'
+                // 'whatsapp' => 'required|regex:/\D*([2-9]\d{2})(\D*)([2-9]\d{2})(\D*)(\d{4})\D*/|min:6|max:7'
+                'whatsapp' => 'required|regex:/^[0-9]+$/|min:6|max:7'
             ], [
                 'whatsapp.regex' => 'A correct phone number should look like this: 17842220000 or 7842220000',
-                'whatsapp.min' => 'A correct phone number should look like this: 17842220000 or 7842220000',
+                // 'whatsapp.min' => 'A correct phone number should look like this: 17842220000 or 7842220000',
                 'whatsapp.min' => 'The phone number must be at least 10 characters.',
                 'whatsapp.max' => 'The phone number must be at most 11 characters.',
             ]);
@@ -65,12 +69,15 @@ class AuthController extends \App\Http\Controllers\Controller
                 'email' => 'required|email|max:64|unique:users',
                 'password' => 'required|min:5|max:24',
                 // 'whatsapp' => 'required|regex:/^([0-9\s\-\+\(\)]*)$/|min:10',
-                'phone' => 'required|regex:/\D*([2-9]\d{2})(\D*)([2-9]\d{2})(\D*)(\d{4})\D*/|min:10|max:11',
+                'phone' => 'required|regex:/^[0-9]+$/|min:6|max:7',
+                // 'phone' => 'required|regex:/\D*([2-9]\d{2})(\D*)([2-9]\d{2})(\D*)(\d{4})\D*/|min:10|max:11',
                 'cid' => 'required|exists:business_categories,id'
             ], [
                 'phone.regex' => 'A correct phone number should look like this: 17842220000 or 7842220000 '
             ]);
         }
+
+
 
         if ($v->fails()) {
             return response()->json([
@@ -78,6 +85,9 @@ class AuthController extends \App\Http\Controllers\Controller
                 'errors' => $v->errors()
             ], 422);
         }
+
+        $phone_no = $request->country_code . $request->whatsapp;
+
 
         // Detect currency based on locale
         $currency = config('default.currency');
@@ -95,7 +105,6 @@ class AuthController extends \App\Http\Controllers\Controller
         $user->first_name = $request->first_name;
         $user->last_name = $request->last_name;
         $user->email = $request->email;
-        $user->whatsapp = $request->whatsapp;
         $user->password = bcrypt($request->password);
         $user->language = $language;
         $user->locale = str_replace('-', '_', $locale);
@@ -104,7 +113,10 @@ class AuthController extends \App\Http\Controllers\Controller
         $user->last_ip_address = request()->ip();
         $user->created_by = 1;
         $user->location = $request->location;
+        $user->whatsapp = $phone_no;
         if ($type == 'business') {
+            $phone_no = $request->country_code . $request->phone;
+            $user->whatsapp = $phone_no;
             $user->premium_expires_at = date(Carbon::now()->addCentury());
         }
 
@@ -130,11 +142,12 @@ class AuthController extends \App\Http\Controllers\Controller
         if ($type == 'business') {
             // Add business
             $business = new Business;
+            $phone_no = $request->country_code . $request->phone;
             $business->name = $request->business_name;
             $business->currency = $request->currency;
             $business->created_by = $user->id;
             $business->category_id = $request->cid;
-            $business->phone = $request->phone;
+            $business->phone = $phone_no;
 
             // Business point rules
             $business->points_expiration_months = (int) 60;
@@ -404,6 +417,8 @@ class AuthController extends \App\Http\Controllers\Controller
      */
     public function postUpdateProfile(Request $request)
     {
+        // return $request->all();
+
         // return auth()->user();
         // return ;
 
@@ -452,8 +467,23 @@ class AuthController extends \App\Http\Controllers\Controller
         auth()->user()->first_name = $request->first_name;
         auth()->user()->last_name = $request->last_name;
         auth()->user()->email = $request->email;
-        auth()->user()->whatsapp = $request->whatsapp;
-        auth()->user()->phone = $request->whatsapp;
+        $code = $request->country_code;
+        // var_dump($code != substr(auth()->user()->whatsapp, 0, 4) && $code != 'undefined');die;
+        // var_dump(substr(auth()->user()->whatsapp, 0, 4));
+        // var_dump($code);
+        // die;
+        // substr(auth()->user()->whatsapp, 0, 4);
+
+        if ($code != substr(auth()->user()->whatsapp, 0, 4) && $code != 'undefined') {
+            $phone_no = $code . substr(auth()->user()->whatsapp, 4);
+            auth()->user()->whatsapp = $phone_no;
+            auth()->user()->phone = $phone_no;
+        } else {
+            auth()->user()->whatsapp = $request->whatsapp;
+            auth()->user()->phone = $request->whatsapp;
+        }
+
+
         // auth()->user()->timezone = $request->timezone;
         auth()->user()->location = $request->location;
         auth()->user()->locale = $request->locale;
@@ -516,6 +546,15 @@ class AuthController extends \App\Http\Controllers\Controller
     {
         $user = User::withoutGlobalScopes()->where('id', Auth::user()->id)->where('active', 1)->firstOrFail();
 
+        $number = "1234567890";
+        $length = Str::length($number);
+        if ($length == 10) {
+            $formatted_number = "$number[0]-$number[1]$number[2]$number[3]-$number[4]$number[5]$number[6]-$number[7]$number[8]$number[9]";
+        } elseif ($length == 11) {
+            $formatted_number = "$number[0]-$number[1]$number[2]$number[3]-$number[4]$number[5]$number[6]-$number[7]$number[8]$number[9]$number[10]";
+        }
+        // return $formatted_number;
+
         $return = [
             'customer_number' => $user->customer_number,
             'active' => (bool) $user->active,
@@ -530,6 +569,7 @@ class AuthController extends \App\Http\Controllers\Controller
             'locale' => $user->getLocale(),
             'location' => $user->location,
             'timezone' => $user->getTimezone(),
+            'phone_no' => $formatted_number,
             'currency' => $user->getCurrency()
         ];
 
