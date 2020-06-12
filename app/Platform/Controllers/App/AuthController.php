@@ -56,8 +56,8 @@ class AuthController extends \App\Http\Controllers\Controller
             ], [
                 'whatsapp.regex' => 'A correct phone number should look like this: 17842220000 or 7842220000',
                 // 'whatsapp.min' => 'A correct phone number should look like this: 17842220000 or 7842220000',
-                'whatsapp.size' => 'The phone number must be exactly 11 characters.',
-                // 'whatsapp.max' => 'The phone number must be at most 11 characters.',
+                'whatsapp.size' => 'The phone number must be exactly 11 numbers.',
+                // 'whatsapp.max' => 'The phone number must be at most 11 numbers.',
             ]);
         } elseif ($type == 'business') {
             $role = 3;
@@ -441,10 +441,10 @@ class AuthController extends \App\Http\Controllers\Controller
                 'whatsapp' => 'required|regex:/^([0-9\s\-\+\(\)]*)$/|size:7'
             ],
             [
-                'whatsapp.size' => 'The phone number must be exactly 7 characters.',
+                'whatsapp.size' => 'The phone number must be exactly 7 numbers.',
                 'whatsapp.regex' => 'The phone number format is invalid.',
                 'whatsapp.required' => 'The phone number is required.',
-                // 'whatsapp.max' => 'The phone number must be at most 11 characters.'
+                // 'whatsapp.max' => 'The phone number must be at most 11 numbers.'
             ]
 
         );
