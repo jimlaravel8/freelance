@@ -438,10 +438,10 @@ class AuthController extends \App\Http\Controllers\Controller
                 'email' => ['required', 'email', 'max:64', Rule::unique('users')->where(function ($query) {
                     return $query->where('id', '<>', auth()->user()->id);
                 })],
-                'whatsapp' => 'required|regex:/^([0-9\s\-\+\(\)]*)$/|size:11'
+                'whatsapp' => 'required|regex:/^([0-9\s\-\+\(\)]*)$/|size:7'
             ],
             [
-                'whatsapp.size' => 'The phone number must be exactly 11 characters.',
+                'whatsapp.size' => 'The phone number must be exactly 7 characters.',
                 'whatsapp.regex' => 'The phone number format is invalid.',
                 'whatsapp.required' => 'The phone number is required.',
                 // 'whatsapp.max' => 'The phone number must be at most 11 characters.'
@@ -474,14 +474,14 @@ class AuthController extends \App\Http\Controllers\Controller
         // die;
         // substr(auth()->user()->whatsapp, 0, 4);
 
-        if ($code != substr(auth()->user()->whatsapp, 0, 4) && $code != 'undefined') {
-            $phone_no = $code . substr(auth()->user()->whatsapp, 4);
-            auth()->user()->whatsapp = $phone_no;
-            auth()->user()->phone = $phone_no;
-        } else {
-            auth()->user()->whatsapp = $request->whatsapp;
-            auth()->user()->phone = $request->whatsapp;
-        }
+        // if ($code != substr(auth()->user()->whatsapp, 0, 4) && $code != 'undefined') {
+        $phone_no = $code . $request->whatsapp;
+        //     auth()->user()->whatsapp = $phone_no;
+        //     auth()->user()->phone = $phone_no;
+        // } else {
+        auth()->user()->whatsapp = $phone_no;
+        auth()->user()->phone = $phone_no;
+        // }
 
 
         // auth()->user()->timezone = $request->timezone;
