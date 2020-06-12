@@ -556,6 +556,7 @@ class AuthController extends \App\Http\Controllers\Controller
         // return $formatted_number;
 
         $return = [
+            'country_code' => substr($user->whatsapp, 0, 4),
             'customer_number' => $user->customer_number,
             'active' => (bool) $user->active,
             'premium' => (bool) $user->premium,
@@ -563,7 +564,8 @@ class AuthController extends \App\Http\Controllers\Controller
             'first_name' => $user->first_name ?? '',
             'last_name' => $user->last_name ?? '',
             'email' => $user->email,
-            'whatsapp' => $user->whatsapp ?? '',
+            'whatsapp' => substr(auth()->user()->whatsapp, 4) ?? '',
+            // 'whatsapp' => $user->whatsapp ?? '',
             'role' => (int) $user->role,
             'language' => $user->getLanguage(),
             'locale' => $user->getLocale(),

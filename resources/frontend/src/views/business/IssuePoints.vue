@@ -92,8 +92,8 @@
                                   rules="required|min:14|max:14"
                                   class="title"
                                   outlined
-                                  v-mask="'##-###-###-###'"
-                                  placeholder="##-###-###-###"
+                                  v-mask="'#-###-###-####'"
+                                  placeholder="#-###-###-####"
                                 />
                               </v-col>
                               <v-col cols="4">
