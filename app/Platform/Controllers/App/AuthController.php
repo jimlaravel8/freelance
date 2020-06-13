@@ -548,10 +548,13 @@ class AuthController extends \App\Http\Controllers\Controller
 
         $number = $user->whatsapp;
         $length = Str::length($number);
+
         if ($length == 10) {
             $formatted_number = "$number[0]-$number[1]$number[2]$number[3]-$number[4]$number[5]$number[6]-$number[7]$number[8]$number[9]";
         } elseif ($length == 11) {
             $formatted_number = "$number[0]-$number[1]$number[2]$number[3]-$number[4]$number[5]$number[6]-$number[7]$number[8]$number[9]$number[10]";
+        } else {
+            $formatted_number = null;
         }
         // return $formatted_number;
 
