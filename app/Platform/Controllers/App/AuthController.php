@@ -38,9 +38,11 @@ class AuthController extends \App\Http\Controllers\Controller
     {
         // return $request->all();
         // $data = $request->all();
+        // $phone_no = $request->country_code . $request->whatsapp;
+
         $locale = request('locale', config('default.language'));
         app()->setLocale($locale);
-        // $data['whatsapp'] = $request->country_code . $request->whatsapp;
+        $request['whatsapp'] = $request->country_code . $request->whatsapp;
         // var_dump($data);
         $type = request('type', 'customer');
         $role = 2;
@@ -52,11 +54,11 @@ class AuthController extends \App\Http\Controllers\Controller
                 'email' => 'required|email|max:64|unique:users',
                 'password' => 'required|min:8|max:24',
                 // 'whatsapp' => 'required|regex:/\D*([2-9]\d{2})(\D*)([2-9]\d{2})(\D*)(\d{4})\D*/|min:6|max:7'
-                'whatsapp' => 'required|regex:/^[0-9]+$/|size:7'
+                'whatsapp' => 'required|regex:/^[0-9]+$/|size:11|unique:users'
             ], [
                 'whatsapp.regex' => 'A correct phone number should look like this: 17842220000 or 7842220000',
-                // 'whatsapp.min' => 'A correct phone number should look like this: 17842220000 or 7842220000',
-                'whatsapp.size' => 'The phone number must be exactly 11 numbers.',
+                'whatsapp.unique' => 'Phone number already exists',
+                'whatsapp.size' => 'The phone number must be exactly 7 numbers.',
                 // 'whatsapp.max' => 'The phone number must be at most 11 numbers.',
             ]);
         } elseif ($type == 'business') {

@@ -493,7 +493,7 @@ class User extends Authenticatable implements JWTSubject, HasLocalePreference, H
      * @return array
      */
     public static function getExtraSelectColumns() {
-      $admin = ['uuid', 'first_name', 'last_name', 'premium_expires_at', 'customer_number'];
+      $admin = ['uuid', 'first_name', 'last_name', 'premium_expires_at', 'customer_number', 'whatsapp'];
       $business = ['uuid', 'first_name', 'last_name'];
 
       return [
