@@ -518,9 +518,11 @@ class DataTableController extends \App\Http\Controllers\Controller
 
         foreach ($records as $key => $record) {
             if ($record['role'] == 'Customer') {
-                // dd(array_key_exists('whatsapp', $records[$key]), $records[$key]);
+                $record_arr =  $record->toArray();
+                // return gettype($record);
+                // dd(array_key_exists('whatsapp', $record_arr));
                 // $number = ($record['whatsapp']) ? $record['whatsapp'] : '';
-                $number = (array_key_exists('whatsapp', $record)) ? $record['whatsapp'] : '';
+                 $number = (array_key_exists('whatsapp', $record_arr)) ? $record_arr['whatsapp'] : '';
                 $length = Str::length($number);
                 if ($length == 10) {
                     $formatted_number = "$number[0]-$number[1]$number[2]$number[3]-$number[4]$number[5]$number[6]-$number[7]$number[8]$number[9]";
