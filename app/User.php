@@ -956,4 +956,9 @@ class User extends Authenticatable implements JWTSubject, HasLocalePreference, H
     public function business() {
       return $this->hasOne(\Platform\Models\Business::class, 'created_by', 'id');
     }
+    public function getCustomerNumberAttribute($value)
+    {
+        $user = User::where('customer_number', $value)->first('whatsapp');
+        return $user->whatsapp;
+    }
 }
