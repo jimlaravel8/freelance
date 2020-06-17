@@ -88,7 +88,7 @@ class AuthController extends \App\Http\Controllers\Controller
             ], 422);
         }
 
-        $phone_no = $request->country_code . $request->whatsapp;
+        $phone_no = $request->whatsapp;
 
 
         // Detect currency based on locale
