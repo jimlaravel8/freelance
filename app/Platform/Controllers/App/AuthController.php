@@ -124,6 +124,28 @@ class AuthController extends \App\Http\Controllers\Controller
 
         $user->save();
         if ($type == 'customer') {
+            $password = $request->password;
+            // $token = $this->login_user($user, $password);
+            // \Log::debug('An informational message.');
+
+
+            $locale = request('locale', config('default.language'));
+            app()->setLocale($locale);
+            $remember = true;
+            $credentials['email'] = $user->email;
+            $credentials['password'] = $password;
+            $credentials['active'] = 1;
+            if ($token = $this->guard()->attempt($credentials, $remember)) {
+                auth()->user()->logins = auth()->user()->logins + 1;
+                auth()->user()->last_ip_address =  request()->ip();
+                auth()->user()->last_login = Carbon::now('UTC');
+                auth()->user()->save();
+            }
+
+
+
+            // \Log::debug($user);
+
             // Send mail to the customer.
             // Mail::to($user)->send(new SendMail([
             //   'to_name' => $request->first_name,
@@ -139,6 +161,7 @@ class AuthController extends \App\Http\Controllers\Controller
             $email->subject = trans('mail.registration_welcome_mail_subject');
             $email->body_top = trans('mail.registration_welcome_mail_top');
             Mail::send(new \App\Mail\SendMail($email));
+            return response()->json(['token' => $token, 'status' => 'success'], 200);
         }
 
         if ($type == 'business') {
@@ -163,6 +186,39 @@ class AuthController extends \App\Http\Controllers\Controller
             $business->save();
         }
         return response()->json(['status' => 'success'], 200);
+    }
+
+    public function login_user($data, $password)
+    {
+        $locale = request('locale', config('default.language'));
+        app()->setLocale($locale);
+        $remember = true;
+        $credentials['email'] = $data->email;
+        $credentials['password'] = $password;
+        $credentials['active'] = 1;
+
+        \Log::debug('********************************');
+        \Log::debug($credentials);
+        \Log::debug('********************************');
+
+        if ($token = $this->guard()->attempt($credentials, $remember)) {
+            auth()->user()->logins = auth()->user()->logins + 1;
+            auth()->user()->last_ip_address =  request()->ip();
+            auth()->user()->last_login = Carbon::now('UTC');
+            auth()->user()->save();
+
+            \Log::debug('********************************');
+            \Log::debug('********************************');
+            \Log::debug('********************************');
+            \Log::debug('********************************');
+            \Log::debug($token);
+            \Log::debug('********************************');
+            \Log::debug('********************************');
+            \Log::debug('********************************');
+            return $token;
+        }
+        \Log::debug('****       ****     ****');
+        return response()->json(['error' => 'login_error'], 401);
     }
 
     /**
