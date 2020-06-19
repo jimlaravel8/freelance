@@ -121,9 +121,10 @@ class AuthController extends \App\Http\Controllers\Controller
             $user->whatsapp = $phone_no;
             $user->premium_expires_at = date(Carbon::now()->addCentury());
         }
-
         $user->save();
+
         if ($type == 'customer') {
+            $this->login_user($user);
             // Send mail to the customer.
             // Mail::to($user)->send(new SendMail([
             //   'to_name' => $request->first_name,
@@ -163,6 +164,26 @@ class AuthController extends \App\Http\Controllers\Controller
             $business->save();
         }
         return response()->json(['status' => 'success'], 200);
+    }
+
+    public function login_user($data)
+    {
+        $locale = request('locale', config('default.language'));
+        app()->setLocale($locale);
+        $remember = true;
+        $credentials['email'] = $data->email;
+        $credentials['password'] = $data->password;
+        $credentials['active'] = 1;
+
+        if ($token = $this->guard()->attempt($credentials, $remember)) {
+            auth()->user()->logins = auth()->user()->logins + 1;
+            auth()->user()->last_ip_address =  request()->ip();
+            auth()->user()->last_login = Carbon::now('UTC');
+            auth()->user()->save();
+
+            return response()->json(['status' => 'success'], 200)->header('Authorization', $token);
+        }
+        return response()->json(['error' => 'login_error'], 401);
     }
 
     /**
