@@ -161,7 +161,7 @@ class AuthController extends \App\Http\Controllers\Controller
             $email->subject = trans('mail.registration_welcome_mail_subject');
             $email->body_top = trans('mail.registration_welcome_mail_top');
             Mail::send(new \App\Mail\SendMail($email));
-            return response()->json(['token' => $token, 'status' => 'success'], 200);
+            return response()->json(['token' =>  $token, 'status' => 'success'], 200);
         }
 
         if ($type == 'business') {

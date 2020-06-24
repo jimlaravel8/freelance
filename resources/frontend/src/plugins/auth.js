@@ -10,8 +10,8 @@ const config = {
     authRedirect: {
         path: '/login'
     },
-    forbiddenRedirect: { 
-        path: '/403'
+    forbiddenRedirect: {
+        path: '/'
     },
     notFoundRedirect: {
         path: '/home'
