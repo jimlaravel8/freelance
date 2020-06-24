@@ -36,9 +36,9 @@
                                             <v-btn v-if="$auth.check() && $auth.user().role == 2" class="mt-5 no-caps" color="ctaBg ctaFg--text" x-large tile depressed :to="{ name: 'customer.earn' }">{{ $t('earn_points') }}</v-btn>
                                             <v-btn v-if="$auth.check() && ($auth.user().role == 3 || $auth.user().role == 4)" class="mt-5 no-caps" color="ctaBg ctaFg--text" x-large tile depressed :to="{ name: 'business.issue-points' }">{{ $t('issue_points') }}</v-btn>
                                         </v-card-text>
-                                        <p>Our app is available on android and ios platforms</p>
-                                        <hr>
-                                        <v-card-actions>
+                                        <p v-if="!$auth.check()">Our app is available on android and ios platforms</p>
+                                        <hr v-if="!$auth.check()">
+                                        <v-card-actions v-if="!$auth.check()">
                                             <v-row>
                                                 <v-col cols="6" xs="6" lg="6" class="offset-sm-3">
                                                     <a href="https://apps.apple.com/us/app/piggy-bank-svg/id1502265988" target="_blank">
@@ -169,5 +169,8 @@ export default {
 img {
     border-style: none;
     width: 130px;
+}
+.v-tabs-bar.v-item-group>* {
+    display: none !important;
 }
 </style>

@@ -10,10 +10,10 @@
                             {{ $t('customer') }}
                             <v-icon size="24">mdi-account-circle</v-icon>
                         </v-tab>
-                        <v-tab :to="{ name: 'register-business' }" class="no-caps" :ripple="false">
+                        <!-- <v-tab :to="{ name: 'register-business' }" class="no-caps" :ripple="false">
                             {{ $t('business') }}
                             <v-icon size="24">mdi-briefcase-account</v-icon>
-                        </v-tab>
+                        </v-tab> -->
                     </v-tabs>
                     <v-divider />
                 </v-card>
