@@ -7,16 +7,16 @@
                     <v-tabs v-model="tab" :color="($store.state.app.dark) ? 'white' : 'black'" class="px-5 content-tabs" icons-and-text height="100" slider-size="4" show-arrows>
                         <v-tabs-slider></v-tabs-slider>
                         <v-tab href="#tab-0" class="no-caps" :ripple="false">
-                            {{ $t('earn') }}
-                            <v-icon size="24">mdi-coins</v-icon>
+                            <!-- {{ $t('earn') }}
+                            <v-icon size="24">mdi-coins</v-icon> -->
                         </v-tab>
-                        <v-tab href="#tab-1" class="no-caps" :ripple="false">
-                            {{ $t('discount') }}
-                            <v-icon size="24">mdi-shopping</v-icon>
+                        <v-tab href="#tab-0" class="no-caps" :ripple="false">
+                            <!-- {{ $t('discount') }}
+                            <v-icon size="24">mdi-shopping</v-icon> -->
                         </v-tab>
-                        <v-tab href="#tab-2" class="no-caps" :ripple="false">
-                            {{ $t('for_stores') }}
-                            <v-icon size="24">mdi-store</v-icon>
+                        <v-tab href="#tab-0" class="no-caps" :ripple="false">
+                            <!-- {{ $t('for_stores') }}
+                            <v-icon size="24">mdi-store</v-icon> -->
                         </v-tab>
                     </v-tabs>
                     <v-divider />
@@ -169,8 +169,5 @@ export default {
 img {
     border-style: none;
     width: 130px;
-}
-.v-tabs-bar.v-item-group>* {
-    display: none !important;
 }
 </style>
