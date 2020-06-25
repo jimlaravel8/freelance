@@ -5,7 +5,19 @@
             <v-container class="inner-container">
                 <v-card class="mt-md-12 mt-0 content-tabs-wrapper" tile elevation="0">
                     <v-tabs v-model="tab" :color="($store.state.app.dark) ? 'white' : 'black'" class="px-5 content-tabs" icons-and-text height="100" slider-size="4" show-arrows>
-                       
+                        <v-tabs-slider></v-tabs-slider>
+                        <v-tab href="#tab-0" class="no-caps" :ripple="false">
+                            <!-- {{ $t('earn') }}
+                            <v-icon size="24">mdi-coins</v-icon> -->
+                        </v-tab>
+                        <v-tab href="#tab-0" class="no-caps" :ripple="false">
+                            <!-- {{ $t('discount') }}
+                            <v-icon size="24">mdi-shopping</v-icon> -->
+                        </v-tab>
+                        <v-tab href="#tab-0" class="no-caps" :ripple="false">
+                            <!-- {{ $t('for_stores') }}
+                            <v-icon size="24">mdi-store</v-icon> -->
+                        </v-tab>
                     </v-tabs>
                     <v-divider />
                 </v-card>
@@ -45,7 +57,7 @@
                             </v-row>
                         </v-container>
                     </v-tab-item>
-                    <!-- <v-tab-item value="tab-1">
+                    <v-tab-item value="tab-1">
                         <v-container class="pa-0">
                             <v-row no-gutters>
                                 <v-col cols="12" sm="6">
@@ -76,7 +88,7 @@
                                 </v-col>
                             </v-row>
                         </v-container>
-                    </v-tab-item> -->
+                    </v-tab-item>
                 </v-tabs-items>
             </v-container>
         </v-img>
@@ -158,5 +170,4 @@ img {
     border-style: none;
     width: 130px;
 }
-
 </style>

@@ -5,11 +5,11 @@
             <v-container class="inner-container">
                 <v-card class="mt-md-12 mt-0 content-tabs-wrapper" tile elevation="0">
                     <v-tabs :color="($store.state.app.dark) ? 'white' : 'black'" class="px-5 content-tabs" icons-and-text height="100" slider-size="4" show-arrows>
-                        <v-tabs-slider></v-tabs-slider>
-                        <v-tab :to="{ name: 'register' }" class="no-caps" :ripple="false">
+                        <!-- <v-tabs-slider></v-tabs-slider> -->
+                        <!-- <v-tab :to="{ name: 'register' }" class="no-caps" :ripple="false">
                             {{ $t('customer') }}
                             <v-icon size="24">mdi-account-circle</v-icon>
-                        </v-tab>
+                        </v-tab> -->
                         <!-- <v-tab :to="{ name: 'register-business' }" class="no-caps" :ripple="false">
                             {{ $t('business') }}
                             <v-icon size="24">mdi-briefcase-account</v-icon>
@@ -306,3 +306,10 @@ export default {
     }
 };
 </script>
+
+<style scoped>
+
+.v-tabs-slider {
+    display: none !important;
+}
+</style>
