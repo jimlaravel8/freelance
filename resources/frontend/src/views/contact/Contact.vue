@@ -17,9 +17,9 @@
           </div>-->
           <div>
             <p
-              class="headline my-5"
+              class="headline my-5" style="font-size: 20px !important;"
             >If you want more information or have any questions, please send an email to piggybankloyalty@gmail.com.</p>
-            <p class="headline">
+            <p class="headline" style="font-size: 20px !important;">
               You may also reach us via WhatsApp:
               <a href="https://wa.me/17845303260?text=Hello" target="_blank">+1-784-530-3260</a>
             </p>
