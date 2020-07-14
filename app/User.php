@@ -977,7 +977,6 @@ class User extends Authenticatable implements JWTSubject, HasLocalePreference, H
         }
     }
 
-
     public function promos()
     {
         return $this->hasMany(Promo::class);
