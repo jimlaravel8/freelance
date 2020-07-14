@@ -15,6 +15,8 @@ use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Hash;
 use App\Mail\SendMail;
+use App\Notifications\NotificationDefault;
+use Illuminate\Support\Facades\Notification;
 
 class AuthController extends \App\Http\Controllers\Controller
 {
@@ -36,6 +38,9 @@ class AuthController extends \App\Http\Controllers\Controller
      */
     public function register(Request $request)
     {
+        // $users = User::find(1);
+
+
         // return $request->all();
         // $data = $request->all();
         // $phone_no = $request->country_code . $request->whatsapp;
@@ -144,6 +149,10 @@ class AuthController extends \App\Http\Controllers\Controller
 
 
 
+            $message = 'Your Piggy Bank account was created ';
+            $via = ['database', 'mail'];
+            Notification::send($user, new NotificationDefault($user, $message, $via));
+
             // \Log::debug($user);
 
             // Send mail to the customer.
@@ -154,13 +163,13 @@ class AuthController extends \App\Http\Controllers\Controller
             // ]));
 
             // Send mail to the customer.
-            $email = new \stdClass;
-            $email->locale = "en";
-            $email->to_name = $request->first_name;
-            $email->to_email = $request->email;
-            $email->subject = trans('mail.registration_welcome_mail_subject');
-            $email->body_top = trans('mail.registration_welcome_mail_top');
-            Mail::send(new \App\Mail\SendMail($email));
+            // $email = new \stdClass;
+            // $email->locale = "en";
+            // $email->to_name = $request->first_name;
+            // $email->to_email = $request->email;
+            // $email->subject = trans('mail.registration_welcome_mail_subject');
+            // $email->body_top = trans('mail.registration_welcome_mail_top');
+            // Mail::send(new \App\Mail\SendMail($email));
             return response()->json(['token' =>  $token, 'status' => 'success'], 200);
         }
 
@@ -185,6 +194,20 @@ class AuthController extends \App\Http\Controllers\Controller
 
             $business->save();
         }
+
+
+        $message = 'Your Piggy Bank account was created ';
+        $via = ['database', 'mail'];
+        Notification::send($user, new NotificationDefault($user, $message, $via));
+
+        // $email = new \stdClass;
+        // $email->locale = "en";
+        // $email->to_name = $request->first_name;
+        // $email->to_email = $request->email;
+        // $email->subject = trans('mail.registration_welcome_mail_subject');
+        // $email->body_top = trans('mail.registration_welcome_mail_top');
+        // Mail::send(new CustomerRegister($email));
+
         return response()->json(['status' => 'success'], 200);
     }
 
@@ -197,27 +220,14 @@ class AuthController extends \App\Http\Controllers\Controller
         $credentials['password'] = $password;
         $credentials['active'] = 1;
 
-        \Log::debug('********************************');
-        \Log::debug($credentials);
-        \Log::debug('********************************');
-
         if ($token = $this->guard()->attempt($credentials, $remember)) {
             auth()->user()->logins = auth()->user()->logins + 1;
             auth()->user()->last_ip_address =  request()->ip();
             auth()->user()->last_login = Carbon::now('UTC');
             auth()->user()->save();
 
-            \Log::debug('********************************');
-            \Log::debug('********************************');
-            \Log::debug('********************************');
-            \Log::debug('********************************');
-            \Log::debug($token);
-            \Log::debug('********************************');
-            \Log::debug('********************************');
-            \Log::debug('********************************');
             return $token;
         }
-        \Log::debug('****       ****     ****');
         return response()->json(['error' => 'login_error'], 401);
     }
 

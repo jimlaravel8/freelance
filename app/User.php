@@ -16,6 +16,7 @@ use CommerceGuys\Intl\Currency\CurrencyRepository;
 use Spatie\MediaLibrary\Models\Media;
 use Spatie\MediaLibrary\HasMedia\HasMedia;
 use Spatie\MediaLibrary\HasMedia\HasMediaTrait;
+use Platform\Models\Promo;
 
 class User extends Authenticatable implements JWTSubject, HasLocalePreference, HasMedia
 {
@@ -957,22 +958,28 @@ class User extends Authenticatable implements JWTSubject, HasLocalePreference, H
       return $this->hasOne(\Platform\Models\Business::class, 'created_by', 'id');
     }
 
-    // public function getCustomerNumberAttribute($value)
-    // {
-    //     $user = User::where('customer_number', $value)->first(['whatsapp', 'role']);
-    //     if ($user->role) {
-    //         $number = $user->whatsapp;
-    //         $length = Str::length($number);
-    //         if ($length == 10) {
-    //             $formatted_number = "$number[0]-$number[1]$number[2]$number[3]-$number[4]$number[5]$number[6]-$number[7]$number[8]$number[9]";
-    //         } elseif ($length == 11) {
-    //             $formatted_number = "$number[0]-$number[1]$number[2]$number[3]-$number[4]$number[5]$number[6]-$number[7]$number[8]$number[9]$number[10]";
-    //         } else {
-    //             $formatted_number = null;
-    //         }
-    //         return $formatted_number;
-    //     } else {
-    //         return $value;
-    //     }
-    // }
+    public function getCustomerNumberAttribute($value)
+    {
+        $user = User::where('customer_number', $value)->first(['whatsapp', 'role']);
+        if ($user->role) {
+            $number = $user->whatsapp;
+            $length = Str::length($number);
+            if ($length == 10) {
+                $formatted_number = "$number[0]-$number[1]$number[2]$number[3]-$number[4]$number[5]$number[6]-$number[7]$number[8]$number[9]";
+            } elseif ($length == 11) {
+                $formatted_number = "$number[0]-$number[1]$number[2]$number[3]-$number[4]$number[5]$number[6]-$number[7]$number[8]$number[9]$number[10]";
+            } else {
+                $formatted_number = null;
+            }
+            return $formatted_number;
+        } else {
+            return $value;
+        }
+    }
+
+
+    public function promos()
+    {
+        return $this->hasMany(Promo::class);
+    }
 }

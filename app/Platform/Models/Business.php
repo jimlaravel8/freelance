@@ -332,4 +332,9 @@ class Business extends Model implements HasMedia
     public function user() {
       return $this->hasOne(\App\User::class, 'id', 'created_by');
     }
+
+    public function promos()
+    {
+        return $this->hasMany(Promo::class);
+    }
 }

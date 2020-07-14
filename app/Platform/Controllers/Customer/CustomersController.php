@@ -30,11 +30,12 @@ class CustomersController extends \App\Http\Controllers\Controller
      *
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function getWallet(Request $request) {
-      return response()->json([
-        'status' => 'success',
-        'wallet' => auth()->user()->getWallet()
-      ], 200);
+    public function getWallet(Request $request)
+    {
+        return response()->json([
+            'status' => 'success',
+            'wallet' => auth()->user()->getWallet()
+        ], 200);
     }
 
     /**
@@ -42,13 +43,14 @@ class CustomersController extends \App\Http\Controllers\Controller
      *
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function getCard(Request $request) {
-      $uuid = $request->uuid;
+    public function getCard(Request $request)
+    {
+        $uuid = $request->uuid;
 
-      return response()->json([
-        'status' => 'success',
-        'card' => auth()->user()->getCard($uuid)
-      ], 200);
+        return response()->json([
+            'status' => 'success',
+            'card' => auth()->user()->getCard($uuid)
+        ], 200);
     }
 
     /**
@@ -56,63 +58,64 @@ class CustomersController extends \App\Http\Controllers\Controller
      *
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function postGenerateDiscountCode(Request $request) {
-      $uuid = $request->uuid;
+    public function postGenerateDiscountCode(Request $request)
+    {
+        $uuid = $request->uuid;
 
-      // Get business with rules based on customer and business account,
-      // without history
-      $business = auth()->user()->getCard($uuid, false, true);
+        // Get business with rules based on customer and business account,
+        // without history
+        $business = auth()->user()->getCard($uuid, false, true);
 
-      if ($business === null) {
+        if ($business === null) {
+            return response()->json([
+                'status' => 'error',
+                'errors' => ['amount' => [trans('app.no_business_found')]]
+            ], 422);
+        }
+
+        $v = Validator::make($request->all(), [
+            'amount' => 'required|numeric|between:' . $business['balance']['rules']['min_amount_redeemable'] . ',' . $business['balance']['rules']['max_amount_redeemable']
+        ]);
+
+        if ($v->fails()) {
+            return response()->json([
+                'status' => 'error',
+                'errors' => $v->errors()
+            ], 422);
+        }
+
+        /**
+         * Passed all validation
+         */
+
+        // Delete existing codes
+        $customer_id = auth()->user()->id;
+        $deletedRows = Code::where('customer_id', $customer_id)->delete();
+
+        // Add generated code to codes table
+        $token = $this->getUniqueCode($customer_id, $business['business_id']);
+        $amount = round(floor($request->amount * 100) / 100, 2);
+        $points = $amount / $business['balance']['rules']['point_value'];
+        $expires_at = Carbon::now()->addHours(config('default.discount_code_expiration_time_hours'));
+
+        $code = new Code;
+        $code->user_id = $business['user_id'];
+        $code->business_id = $business['business_id'];
+        $code->customer_id = $customer_id;
+        $code->code = $token;
+        $code->points = $points;
+        $code->expires_at = $expires_at;
+
+        $code->save();
+
         return response()->json([
-          'status' => 'error',
-          'errors' => ['amount' => [trans('app.no_business_found')]]
-        ], 422);
-      }
-
-      $v = Validator::make($request->all(), [
-        'amount' => 'required|numeric|between:' . $business['balance']['rules']['min_amount_redeemable'] . ',' . $business['balance']['rules']['max_amount_redeemable']
-      ]);
-
-      if ($v->fails()) {
-        return response()->json([
-          'status' => 'error',
-          'errors' => $v->errors()
-        ], 422);
-      }
-
-      /**
-      * Passed all validation
-      */
-
-      // Delete existing codes
-      $customer_id = auth()->user()->id;
-      $deletedRows = Code::where('customer_id', $customer_id)->delete();
-
-      // Add generated code to codes table
-      $token = $this->getUniqueCode($customer_id, $business['business_id']);
-      $amount = round(floor($request->amount * 100) / 100, 2);
-      $points = $amount / $business['balance']['rules']['point_value'];
-      $expires_at = Carbon::now()->addHours(config('default.discount_code_expiration_time_hours'));
-
-      $code = new Code;
-      $code->user_id = $business['user_id'];
-      $code->business_id = $business['business_id'];
-      $code->customer_id = $customer_id;
-      $code->code = $token;
-      $code->points = $points;
-      $code->expires_at = $expires_at;
-
-      $code->save();
-
-      return response()->json([
-        'status' => 'success',
-        'code' => $token,
-        'points' => $points,
-        'amount' => $amount,
-        'expires_at' => $expires_at->timezone(auth()->user()->getTimezone())->format('Y-m-d H:i:s'),
-        'name' => $business['name']
-      ], 200);
+            'status' => 'success',
+            'code' => $token,
+            'points' => $points,
+            'amount' => $amount,
+            'expires_at' => $expires_at->timezone(auth()->user()->getTimezone())->format('Y-m-d H:i:s'),
+            'name' => $business['name']
+        ], 200);
     }
 
     /**
@@ -120,15 +123,32 @@ class CustomersController extends \App\Http\Controllers\Controller
      *
      * @return 4-digit code
      */
-    public function getUniqueCode($customer_id, $business_id) {
-      $token = Core\Secure::getRandom(4, '1234567890');
+    public function getUniqueCode($customer_id, $business_id)
+    {
+        $token = Core\Secure::getRandom(4, '1234567890');
 
-      $code = Code::where('customer_id', $customer_id)->where('business_id', $business_id)->where('code', $token)->first();
+        $code = Code::where('customer_id', $customer_id)->where('business_id', $business_id)->where('code', $token)->first();
 
-      if (!$code) {
-        return $token;
-      } else {
-        return $this->getUniqueCode($customer_id, $business_id);
-      }
+        if (!$code) {
+            return $token;
+        } else {
+            return $this->getUniqueCode($customer_id, $business_id);
+        }
     }
-  }
+
+    public function getcustomerBadge()
+    {
+        $badge = History::where('customer_id', auth()->user()->id)->count();
+        if ($badge >= 25 && $badge < 50) {
+            return 1;
+        } elseif ($badge >= 50 && $badge < 100) {
+            return 2;
+        } elseif ($badge >= 100 && $badge < 200) {
+            return 3;
+        } elseif ($badge >= 200 && $badge < 300) {
+            return 4;
+        } elseif ($badge >= 300) {
+            return 5;
+        }
+    }
+}

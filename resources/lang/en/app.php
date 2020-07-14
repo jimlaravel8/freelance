@@ -38,6 +38,8 @@ return [
   "home" => "Home",
   "home_page_title" => "Piggy Bank Loyalty",
   "home_tab1_title" => "Open a free Piggy Bank account now!",
+  "home_tab1_customer" => "Remember to talk to your favorite merchants and service providers in your area about appreciating you with Piggy Bank Points. You can earn points on every dollar spent and save your points towards future discounts. Every dollar counts!",
+  "home_tab1_business" => "Remember, you can issue/redeem points on the spot. OR, you can record customer number and sale amounts into a simple notebook and then input the data at the end of the day. Also, you can ask your customers to write their phone number on the back of their sales receipt and drop it into a box, which you can process at the end of the day. Finally, you can ask your customers to take a photo of their receipt and whatsapp it to you or us for processing. The choice is yours!",
   "home_tab1_desc" => "Collect loyalty points when you shop with our partner businesses. Launch the app, go to the Earn menu, show your QR-code or unique Customer Number to cashier to earn points.",
   "home_tab2_title" => "Redeem your points for cash discounts",
   "home_tab2_desc" => "Loyalty points are worth real money. Redeem your points for instant cash discounts. Launch the app, go to the Wallet menu and select the business, enter the points value to generate a unique QR-code or a 4-digit confirmation code then show it to the cashier to process your discount.",
@@ -518,5 +520,7 @@ return [
   "version_info" => "Your version of this app.",
 
   'get_help' => 'Get Help',
+
+  'business_promo' => 'Promotions',
 
 ];

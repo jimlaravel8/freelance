@@ -30,7 +30,11 @@
                                         <v-card-text>
                                             <h1 v-if="!$auth.check()" class="fg--text display-2 font-weight-medium" style="line-height: 4rem; max-width: 310px">{{ $t('home_tab1_title') }}</h1>
                                             <h1 v-if="$auth.check()" class="fg--text display-2 font-weight-medium" style="line-height: 4rem; max-width: 350px">{{ $t(getGreetingTime(this.moment())) }}, {{ $auth.user().first_name }}</h1>
-                                            <p class="mt-5 mb-0 fg--text subtitle-1">{{ $t('home_tab1_desc') }}</p>
+
+                                            <p class="mt-5 mb-0 fg--text subtitle-1" v-if="$auth.check() && $auth.user().role == 2">{{ $t('home_tab1_customer') }}</p>
+                                            <p class="mt-5 mb-0 fg--text subtitle-1" v-else-if="$auth.check() && ($auth.user().role == 3 || $auth.user().role == 4)">{{ $t('home_tab1_business') }}</p>
+                                            <p class="mt-5 mb-0 fg--text subtitle-1" v-else>{{ $t('home_tab1_desc') }}</p>
+
                                             <v-btn v-if="!$auth.check()" class="mt-5 no-caps" color="ctaBg ctaFg--text" x-large tile depressed :to="{ name: 'register' }">{{ $t('sign_up_to_earn') }}</v-btn>
                                             <v-btn v-if="$auth.check() && $auth.user().role == 1" class="mt-5 no-caps" color="ctaBg ctaFg--text" x-large tile depressed :to="{ name: 'admin.dashboard' }">{{ $t('dashboard') }}</v-btn>
                                             <v-btn v-if="$auth.check() && $auth.user().role == 2" class="mt-5 no-caps" color="ctaBg ctaFg--text" x-large tile depressed :to="{ name: 'customer.earn' }">{{ $t('earn_points') }}</v-btn>

@@ -151,6 +151,44 @@
                         </v-list>
                     </v-card>
                 </v-menu>
+
+                <v-menu v-if="$auth.check()" offset-y bottom left origin="top right" :close-on-content-click="false" tile v-model="menu">
+                    <template v-slot:activator="{ on, attrs }">
+                        <!-- <v-btn color="indigo" dark v-bind="attrs" v-on="on">
+                                Menu as Popover
+                            </v-btn> -->
+                        <!-- <v-btn text icon color="primary" v-bind="attrs" v-on="on">
+                                <v-icon>mdi-bell</v-icon>
+                            </v-btn> -->
+                        <v-app-bar-nav-icon v-on="on" color="NavFg" v-bind="attrs" style="margin-top: 6px;">
+                            <v-badge :value="hover" color="black" :content="notifications.length" right transition="slide-x-transition">
+                                <v-icon>mdi-bell</v-icon>
+                            </v-badge>
+                        </v-app-bar-nav-icon>
+                    </template>
+
+                    <v-card>
+                        <v-list dense>
+                            <v-subheader>Notifications</v-subheader>
+                            <v-list-item-group color="primary">
+                                <v-list-item v-for="notification in notifications" :key="notification.id">
+                                    <v-list-item-content>
+                                        <v-list-item-title>
+                                            {{ notification.data.notification }} | <b> {{ notification.date }}</b>
+
+                                        </v-list-item-title>
+                                    </v-list-item-content>
+                                </v-list-item>
+                            </v-list-item-group>
+                        </v-list>
+
+                    </v-card>
+                </v-menu>
+
+                <v-btn text icon color="primary" @click="getNotifications">
+                    <v-icon>mdi-refresh</v-icon>
+                </v-btn>
+
                 <!-- computer -->
                 <div class="d-none d-sm-flex d-md-flex d-lg-flex d-xl-flex align-center ml-2" v-if="!$auth.check()">
                     <v-btn color="NavFg NavBg--text" depressed tile class="no-caps" :to="{name: 'register'}">
@@ -302,7 +340,10 @@ export default {
         languages: null,
         pathname: "",
         screenWidth: "",
-        gobackBtn: ""
+        gobackBtn: "",
+        menu: false,
+        hover: true,
+        notifications: [],
         // businesses: []
     }),
     beforeMount() {
@@ -313,7 +354,7 @@ export default {
         this.$vuetify.theme.dark = this.$store.state.app.dark;
         this.$root.$snackbar = this.$refs.snackbar.show;
         this.$root.$confirm = this.$refs.confirm.open;
-
+        this.getNotifications()
         /* Get available translations */
         getAvailableLanguages().then(result => (this.languages = result));
 
@@ -343,6 +384,23 @@ export default {
             return new Intl.NumberFormat(this.locale.replace("_", "-")).format(
                 number
             );
+        },
+        getNotifications() {
+            this.axios
+                .get("/notifications", {
+                    params: {
+                        locale: this.$i18n.locale
+                    }
+                })
+                .then(response => {
+                    this.notifications = response.data
+                    // this.locales = this.$_.toPairs(response.data);
+                    this.locales = this.$_.toPairs({
+                        en: "English",
+                        en_US: "English (United States)",
+                        en_GB: "English (United Kingdom)"
+                    });
+                });
         }
         // async getBusinesses() {
         //   const body = await this.axios(`/customer/businesses`);
@@ -432,6 +490,12 @@ export default {
                             to: {
                                 name: 'contact'
                             }
+                        }, {
+                            label: this.$t('business_promo'),
+                            icon: 'mdi-account-arrow-right',
+                            to: {
+                                name: 'business.promo'
+                            }
                         },
                         {
                             label: "Businesses",
@@ -481,6 +545,12 @@ export default {
                             icon: 'mdi-help',
                             to: {
                                 name: 'contact'
+                            }
+                        }, {
+                            label: this.$t('business_promo'),
+                            icon: 'mdi-account-arrow-right',
+                            to: {
+                                name: 'business.promo'
                             }
                         }
                     ];
@@ -555,6 +625,12 @@ export default {
                             to: {
                                 name: "settings.business.subscription"
                             }
+                        }, {
+                            label: this.$t('business_promo'),
+                            icon: 'mdi-account-arrow-right',
+                            to: {
+                                name: 'business.promo'
+                            }
                         }
                     ];
                 } else if (this.$auth.user().role === 4) {
@@ -609,6 +685,7 @@ export default {
 .v-application--is-ltr .v-list-item__icon:first-child {
     margin-right: 12px;
 }
+
 .v-menu__content--fixed {
     max-height: 100vh !important;
 }

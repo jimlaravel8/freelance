@@ -308,7 +308,6 @@ export default {
 </script>
 
 <style scoped>
-
 .v-tabs-slider {
     display: none !important;
 }

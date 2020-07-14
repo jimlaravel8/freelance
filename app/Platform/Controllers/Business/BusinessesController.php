@@ -7,6 +7,7 @@ use Platform\Models\History;
 use Platform\Models\Code;
 use App\User;
 use App\Http\Controllers;
+use App\Notifications\NotificationDefault;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -16,6 +17,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Notification;
 
 class BusinessesController extends \App\Http\Controllers\Controller
 {
@@ -228,6 +230,30 @@ class BusinessesController extends \App\Http\Controllers\Controller
             $email->business_name = $businessName;
 
             Mail::send(new \App\Mail\SendMail($email));
+            $message = 'Thanks for supporting ' . $businessName . '. You earned ' . $points . ' points ';
+
+            $via = ['database'];
+            Notification::send($customer, new NotificationDefault($customer, $message, $via));
+
+            $badge = History::where('customer_id', auth()->user()->id)->count();
+            if ($badge == 25) {
+                $message = 'Congrats you have achieved Level ' . 1 .  ' status!';
+                Notification::send($customer, new NotificationDefault($customer, $message, $via));
+            } elseif ($badge == 50) {
+                $message = 'Congrats you have achieved Level ' . 2 .  ' status!';
+                Notification::send($customer, new NotificationDefault($customer, $message, $via));
+            } elseif ($badge == 100) {
+                $message = 'Congrats you have achieved Level ' . 3 .  ' status!';
+                Notification::send($customer, new NotificationDefault($customer, $message, $via));
+            } elseif ($badge == 200) {
+                $message = 'Congrats you have achieved Level ' . 4 .  ' status!';
+                Notification::send($customer, new NotificationDefault($customer, $message, $via));
+            } elseif ($badge == 300) {
+                $message = 'Congrats you have achieved Level ' . 5 .  ' status!';
+                Notification::send($customer, new NotificationDefault($customer, $message, $via));
+            }
+
+
             // Monthly transactions paid/unpaid..
             $exists = \DB::table('business_payment_transactions')->where('user_id', $business['id'])
                 ->whereYear('month', Carbon::parse()->year)
@@ -276,7 +302,9 @@ class BusinessesController extends \App\Http\Controllers\Controller
         }
 
         $business = auth()->user()->getBusiness(true);
+        // $businessName = $business['name'];
         $code = Code::where('business_id', $business['business_id'])->where('code', $request->code)->where('expires_at', '>=', Carbon::now())->first();
+        $businessPoints = $code['points'];
 
         if (!$code) {
             return response()->json([
@@ -285,6 +313,11 @@ class BusinessesController extends \App\Http\Controllers\Controller
             ], 422);
         } else {
             $customer = User::where('id', $code->customer_id)->first();
+
+            // $message = 'Congrats! You successfully redeemed ' . $businessPoints . ' points valued at ' . $business['currency'] . $businessPoints/100;
+
+            // Notification::send($customer, new NotificationDefault($customer, $message));
+
             return response()->json([
                 'status' => 'success',
                 'points' => $code->points,
@@ -366,6 +399,12 @@ class BusinessesController extends \App\Http\Controllers\Controller
                 $email->business_name = $business['name'];
                 $email->purchase_amount = intval($code->points * $business['point_value']);
                 Mail::send(new \App\Mail\SendMail($email));
+
+                $businessPoints = $redeem['points'];
+                $message = 'Congrats! You successfully redeemed ' . $businessPoints . ' points valued at ' . $business['currency'] . $businessPoints / 100;
+                $via = ['database'];
+                Notification::send($customer, new NotificationDefault($customer, $message, $via));
+
                 // Delete code
                 $code->delete();
                 $redeem['customer_number'] = $customer['whatsapp'];

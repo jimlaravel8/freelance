@@ -23,27 +23,30 @@ Route::get('i18n/languages', '\Platform\Controllers\Core\Content@getAvailableLan
 Route::get('i18n/{lang}', '\Platform\Controllers\Core\Content@getTranslation');
 
 
+
+Route::resource('notifications', '\Platform\Controllers\App\NotificationController');
+
 // Payment webhooks
 Route::post('webhooks/stripe', '\Platform\Controllers\App\StripeController@postWebhook');
 
-Route::group(['prefix' => 'localization'], function() {
+Route::group(['prefix' => 'localization'], function () {
     Route::get('locales', '\Platform\Controllers\Core\Localization@getLocales');
     Route::get('timezones', '\Platform\Controllers\Core\Localization@getTimezones');
     Route::get('currencies', '\Platform\Controllers\Core\Localization@getCurrencies');
 });
 
 // Public routes
-    // Get All Categories.
-Route::get('/category/get', function() {
+// Get All Categories.
+Route::get('/category/get', function () {
     $data = \DB::table('business_categories')
-    ->orderBy('name')
-    ->get(['name']);
+        ->orderBy('name')
+        ->get(['name']);
     return response()->json($data);
 });
 // Secured app routes
-Route::group(['middleware' => 'auth:api'], function() {
+Route::group(['middleware' => 'auth:api'], function () {
     // In use Categories
-    Route::get('/category/get/u', function() {
+    Route::get('/category/get/u', function () {
         return \DB::select(
             'SELECT
             c.name
@@ -52,13 +55,13 @@ Route::group(['middleware' => 'auth:api'], function() {
             GROUP BY c.name'
         );
     });
-    
-    
-    
+
+
+
     // Admin related routes
     Route::group(['prefix' => 'admin', 'middleware' => 'role:1'], function () {
         Route::get('stats', '\Platform\Controllers\App\AdminController@getStats');
-        
+
         // Daily Earned Points
         Route::get('dailypoints', '\Platform\Controllers\App\StatisticsController@getDailyPoints');
         Route::get('redeemedpoints', '\Platform\Controllers\App\StatisticsController@getDailyRedeemedPointsByHours');
@@ -76,20 +79,27 @@ Route::group(['middleware' => 'auth:api'], function() {
         Route::get('transaction/{date}/{uuid}', '\Platform\Controllers\App\TransactionsController@adminGetMonthlyTransactions');
         Route::get('transaction/{date}/{uuid}/{paid}', '\Platform\Controllers\App\TransactionsController@adminUpdatePaymentStatus');
     });
-    
+
     // Customer related routes
     Route::group(['prefix' => 'customer', 'middleware' => 'role:2'], function () {
         // Wallet
+
+        Route::get('customerBadge', '\Platform\Controllers\Customer\CustomersController@getcustomerBadge');
+
+
         Route::get('wallet', '\Platform\Controllers\Customer\CustomersController@getWallet');
         Route::get('card', '\Platform\Controllers\Customer\CustomersController@getCard');
         Route::post('generate-discount-code', '\Platform\Controllers\Customer\CustomersController@postGenerateDiscountCode');
         Route::get('businesses', '\Platform\Controllers\App\StatisticsController@getBusinessesList');
-       });
-    
+    });
+
     // Business related routes
     Route::group(['prefix' => 'business', 'middleware' => 'role:3'], function () {
         // Business settings
         Route::post('settings', '\Platform\Controllers\Business\BusinessesController@postSettings');
+
+
+        Route::resource('promo', '\Platform\Controllers\Business\PromoController');
 
         // Rules
         Route::post('rules', '\Platform\Controllers\Business\BusinessesController@postUpdateRules');
@@ -102,7 +112,7 @@ Route::group(['middleware' => 'auth:api'], function() {
         Route::post('stripe/token', '\Platform\Controllers\App\StripeController@postToken');
         Route::post('stripe/cancel', '\Platform\Controllers\App\StripeController@postCancelSubscription');
     });
-    
+
     // Business and staff related routes
     Route::group(['prefix' => 'business', 'middleware' => 'role:3,4'], function () {
         // Business settings
@@ -111,15 +121,15 @@ Route::group(['middleware' => 'auth:api'], function() {
         // Issue points
         Route::post('issue/verify-customer-number', '\Platform\Controllers\Business\BusinessesController@postVerifyCustomerNumber');
         Route::post('issue/amount', '\Platform\Controllers\Business\BusinessesController@postIssueAmount');
-        
+
         // Redeem points
         Route::post('redeem/verify-code', '\Platform\Controllers\Business\BusinessesController@postVerifyRedemptionCode');
         Route::post('redeem/process-code', '\Platform\Controllers\Business\BusinessesController@postProcessRedemptionCode');
-        
+
         // Transactions
         Route::get('transactions', '\Platform\Controllers\Business\BusinessesController@getTransactions');
         Route::get('transaction-years', '\Platform\Controllers\App\TransactionsController@getAvailableYears');
-        
+
         // Route::get('transactions', '\Platform\Controllers\App\TransactionsController@getCurrentMonthTransactions');
         Route::get('transaction/{date}', '\Platform\Controllers\App\TransactionsController@getMonthlyTransactions');
     });
@@ -134,8 +144,8 @@ Route::prefix('auth')->group(function () {
     Route::post('password/reset', '\Platform\Controllers\App\AuthController@passwordReset');
     Route::post('password/reset/validate-token', '\Platform\Controllers\App\AuthController@passwordResetValidateToken');
     Route::post('password/update', '\Platform\Controllers\App\AuthController@passwordUpdate');
-    
-    Route::group(['middleware' => 'auth:api'], function() {
+
+    Route::group(['middleware' => 'auth:api'], function () {
         Route::get('user', '\Platform\Controllers\App\AuthController@user');
         Route::post('logout', '\Platform\Controllers\App\AuthController@logout');
         Route::post('profile', '\Platform\Controllers\App\AuthController@postUpdateProfile');
@@ -143,13 +153,13 @@ Route::prefix('auth')->group(function () {
 });
 
 // Secured app routes
-Route::group(['prefix' => 'app', 'middleware' => 'auth:api'], function() {
-    
+Route::group(['prefix' => 'app', 'middleware' => 'auth:api'], function () {
+
     // DataTable
     Route::get('data-table', '\Platform\Controllers\App\DataTableController@getDataList');
     Route::post('data-table/delete', '\Platform\Controllers\App\DataTableController@postDeleteRecords');
     Route::get('data-table/export', '\Platform\Controllers\App\DataTableController@getExport');
-    
+
     // DataForm
     Route::get('data-form', '\Platform\Controllers\App\DataFormController@getDataForm');
     Route::post('data-form/relation', '\Platform\Controllers\App\DataFormController@postGetRelation');
@@ -157,11 +167,10 @@ Route::group(['prefix' => 'app', 'middleware' => 'auth:api'], function() {
 });
 
 // Yet not secured Category routes.
-Route::group(['prefix' => 'category'], function() {
+Route::group(['prefix' => 'category'], function () {
     Route::get('/all', '\Platform\Controllers\App\CategoryController@getAllCategories');
     Route::get('/used', '\Platform\Controllers\App\CategoryController@getUsedCategories');
 });
 
-Route::group(['middleware' => 'auth:api'], function() {
-    
+Route::group(['middleware' => 'auth:api'], function () {
 });

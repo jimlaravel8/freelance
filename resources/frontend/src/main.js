@@ -19,6 +19,9 @@ import "@/components/components";
 //import 'roboto-fontface/css/roboto/roboto-fontface.css'
 import "@mdi/font/css/materialdesignicons.css";
 
+
+window.eventBus = new Vue()
+
 // Google charts
 import VueGoogleCharts from "vue-google-charts";
 Vue.use(VueGoogleCharts);

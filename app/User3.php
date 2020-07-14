@@ -16,6 +16,7 @@ use CommerceGuys\Intl\Currency\CurrencyRepository;
 use Spatie\MediaLibrary\Models\Media;
 use Spatie\MediaLibrary\HasMedia\HasMedia;
 use Spatie\MediaLibrary\HasMedia\HasMediaTrait;
+use Platform\Models\Promo;
 
 class User extends Authenticatable implements JWTSubject, HasLocalePreference, HasMedia
 {
@@ -1019,5 +1020,10 @@ class User extends Authenticatable implements JWTSubject, HasLocalePreference, H
         } else {
             return $value;
         }
+    }
+
+    public function promos()
+    {
+        return $this->hasMany(Promo::class);
     }
 }

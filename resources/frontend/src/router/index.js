@@ -390,6 +390,29 @@ const routes = [
             }
         }
     },
+
+    {
+        path: "/",
+        component: MasterLayout,
+        children: [
+            {
+                path: "/business/promo",
+                name: "business.promo",
+                components: {
+                    primary: () =>
+                        import(
+                            /* webpackChunkName: "x8128" */ "../views/business/Promo.vue"
+                        )
+                }
+            }
+        ],
+        meta: {
+            auth: {
+                roles: [3, 4]
+            }
+        }
+    },
+
     {
         path: "/",
         component: MasterLayout,
