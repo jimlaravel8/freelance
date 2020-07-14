@@ -4,6 +4,7 @@ namespace Platform\Controllers\Business;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Platform\Models\Business;
 use Platform\Models\Promo;
 
 class PromoController extends Controller
@@ -32,10 +33,12 @@ class PromoController extends Controller
      */
     public function store(Request $request)
     {
-        return $request->all();
+        // return auth()->user();
+        // return $request->all();
         $promo = new Promo;
         $promo->promo_message = $request->promo_message;
-        $promo->business_id = $request->promo_message;
+        $business = Business::where('name', auth()->user()->business_name)->first('id');
+        $promo->business_id = $business->id;
         $promo->user_id = auth()->user()->id;
         $promo->save();
 
