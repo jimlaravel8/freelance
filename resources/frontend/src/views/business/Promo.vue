@@ -8,7 +8,16 @@
 
                         <v-card flat tile class="content-tabs-card pa-5 pt-0 mb-0 mb-md-12 mx-auto overflow-hidden">
                             <v-app-bar color="white" dark>
-                                <v-btn color="primary" flat @click="openSend">Send Promo message</v-btn>
+                                <v-btn color="primary" text @click="openSend">Send Promo message</v-btn>
+                                <v-spacer></v-spacer>
+                                <v-tooltip v-model="show" top>
+                                    <template v-slot:activator="{ on, attrs }">
+                                        <v-btn icon v-bind="attrs" v-on="on" @click="refresh_data">
+                                            <v-icon>mdi-refresh</v-icon>
+                                        </v-btn>
+                                    </template>
+                                    <span>Refresh</span>
+                                </v-tooltip>
                             </v-app-bar>
 
                             <v-card-title>
@@ -29,16 +38,16 @@
                                         nextIcon: 'mdi-chevron-right'
                                     }">
                                     <template v-slot:item.promo_message="{ item }">
-                                    <!-- <span id="message_tab">{{ item.promo_message }}</span> -->
-                                    <p class="mb-0 fg--text subtitle-1">
-                                        <v-tooltip top max-width="340" color="NavBg NagFg--text">
-                                            <template v-slot:activator="{ on }">
-                                            <span v-on="on" id="message_tab">{{ item.promo_message }}</span>
-                                            </template>
-                                            <span>{{ item.promo_message }}</span>
-                                            <!-- <span v-html="$t('earn_points_info')"></span> -->
-                                        </v-tooltip>
-                                    </p>
+                                        <!-- <span id="message_tab">{{ item.promo_message }}</span> -->
+                                        <p class="mb-0 fg--text subtitle-1">
+                                            <v-tooltip top max-width="340" color="NavBg NagFg--text">
+                                                <template v-slot:activator="{ on }">
+                                                    <span v-on="on" id="message_tab">{{ item.promo_message }}</span>
+                                                </template>
+                                                <span>{{ item.promo_message }}</span>
+                                                <!-- <span v-html="$t('earn_points_info')"></span> -->
+                                            </v-tooltip>
+                                        </p>
                                     </template>
                                     <template v-slot:item.value="{ item }">{{ formatCurrency(item.value) }}</template>
                                     <template v-slot:item.created_at="{ item }">{{ formatDate(item.created_at, 'lll') }}</template>
@@ -75,22 +84,12 @@ export default {
         transactions: []
     }),
     created() {
+        this.refresh_data()
         // Set locale
         this.locale = this.$auth.check() ?
             this.$auth.user().locale :
             Intl.DateTimeFormat().resolvedOptions().locale || this.$i18n.locale;
         this.moment.locale(this.locale.substr(0, 2));
-
-        this.axios
-            .get("/business/promo", {
-                params: {
-                    locale: this.$i18n.locale
-                }
-            })
-            .then(response => {
-                this.transactions = response.data;
-                this.loading = false;
-            });
 
         // Tab images
         this.tabImgs = [
@@ -113,10 +112,27 @@ export default {
             images[i] = new Image();
             images[i].src = img;
         });
+
+        eventBus.$on('refreshDataEvent', data => {
+            this.refresh_data()
+        })
     },
     methods: {
-        openSend () {
-        eventBus.$emit('sendMessageEvent')
+        refresh_data() {
+            this.axios
+                .get("/business/promo", {
+                    params: {
+                        locale: this.$i18n.locale
+                    }
+                })
+                .then(response => {
+                    this.transactions = response.data;
+                    this.loading = false;
+                });
+
+        },
+        openSend() {
+            eventBus.$emit('sendMessageEvent')
         },
         formatNumber(number) {
             return new Intl.NumberFormat(this.locale.replace("_", "-")).format(
@@ -204,7 +220,8 @@ export default {
     -webkit-line-clamp: 3;
     -webkit-box-orient: vertical;
 }
+
 .no-gutters {
-        margin-top: 60px;
+    margin-top: 60px;
 }
 </style>

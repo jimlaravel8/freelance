@@ -151,15 +151,47 @@
                         </v-list>
                     </v-card>
                 </v-menu>
+                <!-- <myNotifications :notifications="notifications" /> -->
+                <!-- <v-spacer></v-spacer> -->
+                <v-menu v-if="$auth.check() && $auth.user().role == 2" offset-y bottom left origin="top right" :close-on-content-click="true" tile>
+                    <template v-slot:activator="{ on }">
+                        <div class="d-flex align-center">
+                            <v-app-bar-nav-icon v-on="on" color="NavFg" @click="markAsRead">
+                                <!-- <v-icon>mdi-bell</v-icon> -->
+                                <v-badge :value="hover" color="black" :content="notification_count" right transition="slide-x-transition">
+                                    <v-icon>mdi-bell</v-icon>
+                                </v-badge>
+                            </v-app-bar-nav-icon>
+                        </div>
+                    </template>
+                    <v-card tile max-width="460">
+                        <v-list dense tile class="pt-0">
+                            <v-list-item-group>
+                                <v-layout>
+                                    <v-subheader class="text-uppercase">Notifications</v-subheader>
+                                </v-layout>
+                                <v-divider></v-divider>
+                                <template v-for="(item, index) in notifications">
+                                    <v-list-item exact :key="item.id">
+                                        <v-list-item-content>
+                                            <v-list-item-subtitle>
+                                                {{ item.data.notification }} | <b> {{ item.date }}</b>
+                                            </v-list-item-subtitle>
 
-                <v-menu v-if="$auth.check()" offset-y bottom left origin="top right" :close-on-content-click="false" tile v-model="menu">
+                                            <!-- <v-list-item-title>
+                                                {{ item.data.notification }} | <b> {{ item.date }}</b>
+                                            </v-list-item-title> -->
+                                        </v-list-item-content>
+
+                                    </v-list-item>
+                                    <v-divider v-if="index + 1 < notifications.length" :key="index"></v-divider>
+                                </template>
+                            </v-list-item-group>
+                        </v-list>
+                    </v-card>
+                </v-menu>
+                <!-- <v-menu v-if="$auth.check()" offset-y bottom left origin="top right" :close-on-content-click="false" tile v-model="menu">
                     <template v-slot:activator="{ on, attrs }">
-                        <!-- <v-btn color="indigo" dark v-bind="attrs" v-on="on">
-                                Menu as Popover
-                            </v-btn> -->
-                        <!-- <v-btn text icon color="primary" v-bind="attrs" v-on="on">
-                                <v-icon>mdi-bell</v-icon>
-                            </v-btn> -->
                         <v-app-bar-nav-icon v-on="on" color="NavFg" v-bind="attrs" style="margin-top: 6px;">
                             <v-badge :value="hover" color="black" :content="notifications.length" right transition="slide-x-transition">
                                 <v-icon>mdi-bell</v-icon>
@@ -183,11 +215,11 @@
                         </v-list>
 
                     </v-card>
-                </v-menu>
+                </v-menu> -->
 
-                <v-btn text icon color="primary" @click="getNotifications">
+                <!-- <v-btn text icon color="primary" @click="getNotifications">
                     <v-icon>mdi-refresh</v-icon>
-                </v-btn>
+                </v-btn> -->
 
                 <!-- computer -->
                 <div class="d-none d-sm-flex d-md-flex d-lg-flex d-xl-flex align-center ml-2" v-if="!$auth.check()">
@@ -326,6 +358,7 @@
 </template>
 
 <script>
+// import myNotifications from './Clean'
 import {
     getAvailableLanguages,
     loadLanguageAsync
@@ -333,7 +366,9 @@ import {
 import axios from "axios";
 
 export default {
-    components: {},
+    components: {
+        // myNotifications
+    },
     data: () => ({
         locale: "en",
         drawer: false,
@@ -344,6 +379,7 @@ export default {
         menu: false,
         hover: true,
         notifications: [],
+        notification_count: 0
         // businesses: []
     }),
     beforeMount() {
@@ -371,6 +407,15 @@ export default {
         this.moment.locale(this.locale.substr(0, 2));
     },
     methods: {
+        markAsRead() {
+            this.axios.post("/notifications")
+                .then(response => {
+                    console.log(response);
+                    this.getNotifications()
+                }).catch((error) => {
+                    console.log(error);
+                });
+        },
         switchDarkTheme() {
             let dark = this.$vuetify.theme.dark;
             this.$vuetify.theme.dark = !dark;
@@ -393,7 +438,8 @@ export default {
                     }
                 })
                 .then(response => {
-                    this.notifications = response.data
+                    this.notifications = response.data.notifications
+                    this.notification_count = response.data.notification_count
                     // this.locales = this.$_.toPairs(response.data);
                     this.locales = this.$_.toPairs({
                         en: "English",
@@ -490,12 +536,6 @@ export default {
                             to: {
                                 name: 'contact'
                             }
-                        }, {
-                            label: this.$t('business_promo'),
-                            icon: 'mdi-account-arrow-right',
-                            to: {
-                                name: 'business.promo'
-                            }
                         },
                         {
                             label: "Businesses",
@@ -545,12 +585,6 @@ export default {
                             icon: 'mdi-help',
                             to: {
                                 name: 'contact'
-                            }
-                        }, {
-                            label: this.$t('business_promo'),
-                            icon: 'mdi-account-arrow-right',
-                            to: {
-                                name: 'business.promo'
                             }
                         }
                     ];
@@ -688,5 +722,10 @@ export default {
 
 .v-menu__content--fixed {
     max-height: 100vh !important;
+}
+
+.v-list-item__subtitle,
+.v-list-item__title {
+    white-space: break-spaces !important;
 }
 </style>
