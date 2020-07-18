@@ -3,14 +3,14 @@
     <v-dialog v-model="dialog" persistent max-width="500px">
         <v-card>
             <v-card-title>
-                <span class="headline">Promo Message</span>
+                <span class="headline">Promo Message: Here you can send an alert or promotional message to all customers who earn points from you.</span>
             </v-card-title>
             <v-divider></v-divider>
             <v-card-text>
                 <v-container>
                     <v-row>
                         <v-col cols="12">
-                            <v-textarea label="Message" v-model="form.promo_message"></v-textarea>
+                            <v-textarea counter :rules="rules" label="Message" v-model="form.promo_message" @input="assertMaxChars"></v-textarea>
                         </v-col>
                     </v-row>
                 </v-container>
@@ -42,7 +42,10 @@ export default {
         },
         snackbar: false,
         text: 'Message sent',
-        loading: false
+        loading: false,
+        rules: [v => v.length <= 200 || 'Max 200 characters'],
+        maxTextLength: 200
+
     }),
 
     created() {
@@ -52,6 +55,13 @@ export default {
     },
 
     methods: {
+        assertMaxChars() {
+            console.log(this.form.promo_message.length + '::::::' + this.maxTextLength);
+
+            if (this.form.promo_message.length >= this.maxTextLength) {
+                this.form.promo_message = this.form.promo_message.substring(0, this.maxTextLength);
+            }
+        },
         save() {
             this.loading = true
             this.axios.post("/business/promo", this.form)

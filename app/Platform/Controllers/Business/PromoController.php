@@ -41,24 +41,27 @@ class PromoController extends Controller
     {
         // return auth()->user();
         // return $request->all();
+        $customers = History::select(DB::raw('count(*) as no_count, customer_id'))->groupBy('customer_id')->get();
         $promo = new Promo;
         $promo->promo_message = $request->promo_message;
         $business = Business::where('name', auth()->user()->business_name)->first('id');
         $promo->business_id = $business->id;
         $promo->user_id = auth()->user()->id;
-        $promo->save();
-
-        $customers = History::select(DB::raw('count(*) as no_count, customer_id'))->groupBy('customer_id')->get();
 
         $via = ['database'];
+        $customer_count = 0;
         foreach ($customers as $value) {
             $message = 'Message from ' . auth()->user()->business_name . ' ' . $request->promo_message;
             $user = User::find($value['customer_id']);
             // return $value['no_count'];
             if ($value['no_count'] > 1) {
+                $customer_count += 1;
                 Notification::send($user, new NotificationDefault($user, $message, $via));
             }
         }
+        $promo->customer_count = $customer_count;
+        $promo->save();
+
         // return $customers = History::where('business_id', $business->id)->distinct('customer_id')->get('customer_id');
 
 

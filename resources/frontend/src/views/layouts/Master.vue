@@ -57,6 +57,46 @@
                 <v-toolbar-items class="d-flex align-center navigation" v-if="!$auth.check()">
                     <v-btn text exact color="NavFg--text" :dark="true" :ripple="false" :to="{ name: 'login' }" class="no-caps subtitle-2 d-none d-sm-flex d-md-flex d-lg-flex d-xl-flex">{{ $t('log_in') }}</v-btn>
                 </v-toolbar-items>
+
+                <v-menu v-if="$auth.check() && $auth.user().role == 2" offset-y bottom left origin="top right" :close-on-content-click="true" tile>
+                    <template v-slot:activator="{ on }">
+                        <div class="d-flex align-center">
+                            <v-app-bar-nav-icon v-on="on" color="NavFg" @click="markAsRead">
+                                <!-- <v-icon>mdi-bell</v-icon> -->
+                                <v-badge :value="hover" color="black" :content="notification_count" right transition="slide-x-transition">
+                                    <v-icon>mdi-bell</v-icon>
+                                </v-badge>
+                            </v-app-bar-nav-icon>
+                        </div>
+                    </template>
+                    <v-card tile max-width="460">
+                        <v-list dense tile class="pt-0">
+                            <v-list-item-group>
+                                <v-layout>
+                                    <v-subheader class="text-uppercase">Notifications</v-subheader>
+                                </v-layout>
+                                <v-divider></v-divider>
+                                <template v-for="(item, index) in notifications">
+                                    <v-list-item exact :key="item.id">
+                                        <v-list-item-content>
+                                            <v-list-item-subtitle>
+                                                {{ item.data.notification }} | <b> {{ item.date }}</b>
+                                            </v-list-item-subtitle>
+
+                                            <!-- <v-list-item-title>
+                                                {{ item.data.notification }} | <b> {{ item.date }}</b>
+                                            </v-list-item-title> -->
+                                        </v-list-item-content>
+
+                                    </v-list-item>
+                                    <v-divider v-if="index + 1 < notifications.length" :key="index"></v-divider>
+                                </template>
+                            </v-list-item-group>
+                        </v-list>
+                    </v-card>
+                </v-menu>
+
+
                 <v-menu v-if="$auth.check()" offset-y bottom left origin="top right" :close-on-content-click="true" tile>
                     <template v-slot:activator="{ on }">
                         <div class="d-flex align-center">
@@ -153,43 +193,6 @@
                 </v-menu>
                 <!-- <myNotifications :notifications="notifications" /> -->
                 <!-- <v-spacer></v-spacer> -->
-                <v-menu v-if="$auth.check() && $auth.user().role == 2" offset-y bottom left origin="top right" :close-on-content-click="true" tile>
-                    <template v-slot:activator="{ on }">
-                        <div class="d-flex align-center">
-                            <v-app-bar-nav-icon v-on="on" color="NavFg" @click="markAsRead">
-                                <!-- <v-icon>mdi-bell</v-icon> -->
-                                <v-badge :value="hover" color="black" :content="notification_count" right transition="slide-x-transition">
-                                    <v-icon>mdi-bell</v-icon>
-                                </v-badge>
-                            </v-app-bar-nav-icon>
-                        </div>
-                    </template>
-                    <v-card tile max-width="460">
-                        <v-list dense tile class="pt-0">
-                            <v-list-item-group>
-                                <v-layout>
-                                    <v-subheader class="text-uppercase">Notifications</v-subheader>
-                                </v-layout>
-                                <v-divider></v-divider>
-                                <template v-for="(item, index) in notifications">
-                                    <v-list-item exact :key="item.id">
-                                        <v-list-item-content>
-                                            <v-list-item-subtitle>
-                                                {{ item.data.notification }} | <b> {{ item.date }}</b>
-                                            </v-list-item-subtitle>
-
-                                            <!-- <v-list-item-title>
-                                                {{ item.data.notification }} | <b> {{ item.date }}</b>
-                                            </v-list-item-title> -->
-                                        </v-list-item-content>
-
-                                    </v-list-item>
-                                    <v-divider v-if="index + 1 < notifications.length" :key="index"></v-divider>
-                                </template>
-                            </v-list-item-group>
-                        </v-list>
-                    </v-card>
-                </v-menu>
                 <!-- <v-menu v-if="$auth.check()" offset-y bottom left origin="top right" :close-on-content-click="false" tile v-model="menu">
                     <template v-slot:activator="{ on, attrs }">
                         <v-app-bar-nav-icon v-on="on" color="NavFg" v-bind="attrs" style="margin-top: 6px;">

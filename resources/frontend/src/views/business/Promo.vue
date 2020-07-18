@@ -5,10 +5,11 @@
             <v-container class="inner-container">
                 <v-row no-gutters>
                     <v-col cols="12" md="12">
-
                         <v-card flat tile class="content-tabs-card pa-5 pt-0 mb-0 mb-md-12 mx-auto overflow-hidden">
                             <v-app-bar color="white" dark>
-                                <v-btn color="primary" text @click="openSend">Send Promo message</v-btn>
+                                <v-spacer></v-spacer>
+                                <v-btn color="blue darken-1" @click="openSend">Send Promo message</v-btn>
+                                <!-- <v-btn color="primary" @click="openSend">Send Promo message</v-btn> -->
                                 <v-spacer></v-spacer>
                                 <v-tooltip v-model="show" top>
                                     <template v-slot:activator="{ on, attrs }">

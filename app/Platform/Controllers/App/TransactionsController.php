@@ -290,7 +290,7 @@ class TransactionsController extends \App\Http\Controllers\Controller {
         if(!$admin) { // if user is a business.
             $diff = Carbon::parse(auth()->user()->created_at)->diffInYears($now) + 1;
             for($i=0; $i<$diff; $i++) {
-                return $year = Carbon::now()->subtract($i, 'years')->format('Y');
+                $year = Carbon::now()->subtract($i, 'years')->format('Y');
                 array_push($years, $year);
             }
             return response()->json(['years' => $years]);
