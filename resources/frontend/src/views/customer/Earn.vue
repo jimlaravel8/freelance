@@ -23,29 +23,30 @@
                             <v-row no-gutters>
                                 <v-col cols="12" sm="9" md="6">
                                     <v-card flat tile class="content-tabs-card pa-5 mb-0 mb-md-12">
-                                        <v-card-title primary-title>
-                                            <!-- <v-rating v-model="ratings" readonly>
+                                        <!-- <v-card-title primary-title> -->
+                                        <!-- <v-rating v-model="ratings" readonly>
                                                 <template v-slot:item="props">
                                                     <v-icon :color="props.isFilled ? genColor(props.index) : 'grey lighten-1'" large @click="props.click">
                                                         {{ props.isFilled ? 'mdi-star-circle' : 'mdi-circle-outline' }}
                                                     </v-icon>
                                                 </template>
                                             </v-rating> -->
+                                   
 
-                                            <v-tooltip top max-width="340" color="NavBg NagFg--text">
-                                                <template v-slot:activator="{ on }">
-                                                    <v-rating v-model="ratings" readonly>
-                                                        <template v-slot:item="props">
-                                                            <v-icon :color="props.isFilled ? genColor(props.index) : 'grey lighten-1'" large @click="props.click">
-                                                                {{ props.isFilled ? 'mdi-star-circle' : 'mdi-circle-outline' }}
-                                                            </v-icon>
-                                                        </template>
-                                                    </v-rating>
-                                                </template>
-                                                <span>Earn stars based on the number of times you earn points. These are the levels: 1 Star: 0-25, 2 Stars: 26-50, 3 Stars: 51-100, 4 Stars: 101-200,5 Stars 201 and above.</span>
-                                                <!-- <span v-html="$t('earn_points_info')"></span> -->
-                                            </v-tooltip>
-                                        </v-card-title>
+                                        <v-tooltip top max-width="340" color="NavBg NagFg--text">
+                                            <template v-slot:activator="{ on }">
+                                                <v-rating v-model="ratings" readonly v-on="on">
+                                                    <template v-slot:item="props">
+                                                        <v-icon :color="props.isFilled ? genColor(props.index) : 'grey lighten-1'" size="30" @click="props.click">
+                                                            {{ props.isFilled ? 'mdi-star-circle' : 'mdi-circle-outline' }}
+                                                        </v-icon>
+                                                    </template>
+                                                </v-rating>
+                                            </template>
+                                            <span>Earn stars based on the number of times you earn points. These are the levels: 1 Star: 0-25, 2 Stars: 26-50, 3 Stars: 51-100, 4 Stars: 101-200,5 Stars 201 and above.</span>
+                                            <!-- <span v-html="$t('earn_points_info')"></span> -->
+                                        </v-tooltip>
+                                        <!-- </v-card-title> -->
                                         <v-card-text>
                                             <p class="mb-0 fg--text subtitle-1">
                                                 {{ $t('earn_points_head') }}

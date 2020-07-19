@@ -59,13 +59,21 @@
                 </v-toolbar-items>
 
                 <v-menu v-if="$auth.check() && $auth.user().role == 2" offset-y bottom left origin="top right" :close-on-content-click="true" tile>
-                    <template v-slot:activator="{ on }">
+                    <template v-slot:activator="{ on }" v-if="notification_count > 0">
                         <div class="d-flex align-center">
                             <v-app-bar-nav-icon v-on="on" color="NavFg" @click="markAsRead">
                                 <!-- <v-icon>mdi-bell</v-icon> -->
-                                <v-badge :value="hover" color="black" :content="notification_count" right transition="slide-x-transition">
+                                <v-badge :value="hover" color="yellow" :content="notification_count" right transition="slide-x-transition">
                                     <v-icon>mdi-bell</v-icon>
                                 </v-badge>
+                            </v-app-bar-nav-icon>
+                        </div>
+                    </template>
+
+                    <template v-slot:activator="{ on }" v-else>
+                        <div class="d-flex align-center">
+                            <v-app-bar-nav-icon v-on="on" color="NavFg">
+                                <v-icon>mdi-bell</v-icon>
                             </v-app-bar-nav-icon>
                         </div>
                     </template>
@@ -95,7 +103,6 @@
                         </v-list>
                     </v-card>
                 </v-menu>
-
 
                 <v-menu v-if="$auth.check()" offset-y bottom left origin="top right" :close-on-content-click="true" tile>
                     <template v-slot:activator="{ on }">
@@ -408,6 +415,10 @@ export default {
         locale = this.$auth.check() ? this.$auth.user().locale : locale;
         this.locale = locale;
         this.moment.locale(this.locale.substr(0, 2));
+
+        setInterval(() => {
+            this.getNotifications()
+        }, 10000);
     },
     methods: {
         markAsRead() {
@@ -717,7 +728,7 @@ export default {
 };
 </script>
 
-<style scoped>
+<style>
 .v-application--is-ltr .v-list-item__action:first-child,
 .v-application--is-ltr .v-list-item__icon:first-child {
     margin-right: 12px;
@@ -730,5 +741,9 @@ export default {
 .v-list-item__subtitle,
 .v-list-item__title {
     white-space: break-spaces !important;
+}
+
+.v-badge__badge {
+    color: #000 !important;
 }
 </style>

@@ -1,9 +1,10 @@
 <template>
 <v-row justify="center">
-    <v-dialog v-model="dialog" persistent max-width="500px">
+    <v-dialog v-model="dialog" persistent max-width="550px">
         <v-card>
             <v-card-title>
-                <span class="headline">Promo Message: Here you can send an alert or promotional message to all customers who earn points from you.</span>
+                <h2 style="margin: auto;">Promo Message</h2>
+                <p> Here you can send an alert or promotional message to all customers who earn points from you. </p>
             </v-card-title>
             <v-divider></v-divider>
             <v-card-text>

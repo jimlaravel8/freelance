@@ -16,7 +16,8 @@ class NotificationController extends \App\Http\Controllers\Controller
         // }
         // foreach ( $user->unreadNotifications as $notification) {
         //     return $notification->data['notification'];
-        $user->notifications->transform(function ($notification) {
+        $notifications = auth()->user()->notifications()->take(10)->orderBy('created_at', 'DESC')->get();
+        $notifications->transform(function ($notification) {
             // dd($notification);
             $notification->date = $notification->created_at->diffForHumans();
             // }

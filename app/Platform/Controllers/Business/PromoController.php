@@ -50,6 +50,7 @@ class PromoController extends Controller
 
         $via = ['database'];
         $customer_count = 0;
+        // $icon = ;
         foreach ($customers as $value) {
             $message = 'Message from ' . auth()->user()->business_name . ' ' . $request->promo_message;
             $user = User::find($value['customer_id']);

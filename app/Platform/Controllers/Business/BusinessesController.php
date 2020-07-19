@@ -230,7 +230,7 @@ class BusinessesController extends \App\Http\Controllers\Controller
             $email->business_name = $businessName;
 
             Mail::send(new \App\Mail\SendMail($email));
-            $message = 'Thanks for supporting ' . $businessName . '. You earned ' . $points . ' points ';
+            $message = 'Thanks for supporting ' . $businessName . '. You earned ' . $points . ' point(s) ';
 
             $via = ['database'];
             Notification::send($customer, new NotificationDefault($customer, $message, $via));
@@ -401,7 +401,7 @@ class BusinessesController extends \App\Http\Controllers\Controller
                 Mail::send(new \App\Mail\SendMail($email));
 
                 $businessPoints = $redeem['points'];
-                $message = 'Congrats! You successfully redeemed ' . $businessPoints . ' points valued at ' . $business['currency'] . $businessPoints / 100;
+                $message = 'Congrats! You successfully redeemed ' . $businessPoints . ' points from ' . $business['name'] . ' valued at ' . $business['currency'] . $businessPoints / 100;
                 $via = ['database'];
                 Notification::send($customer, new NotificationDefault($customer, $message, $via));
 
