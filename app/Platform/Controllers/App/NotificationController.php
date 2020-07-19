@@ -18,14 +18,13 @@ class NotificationController extends \App\Http\Controllers\Controller
         //     return $notification->data['notification'];
         $notifications = auth()->user()->notifications()->take(10)->orderBy('created_at', 'DESC')->get();
         $notifications->transform(function ($notification) {
-            // dd($notification);
             $notification->date = $notification->created_at->diffForHumans();
             // }
             return $notification;
         });
         $notification_count = $user->unreadNotifications->count();
         // $notification = Arr::prepend($user->notifications->toArray(), $notification_count, 'notification_count');
-        return response()->json(['notifications' =>  $user->notifications, 'notification_count' => $notification_count], 200);
+        return response()->json(['notifications' =>  $notifications, 'notification_count' => $notification_count], 200);
 
         return $user->notifications;
     }
