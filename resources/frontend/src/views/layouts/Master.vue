@@ -78,7 +78,7 @@
                         </div>
                     </template>
                     <v-card tile max-width="460">
-                        <v-list dense tile class="pt-0">
+                        <!-- <v-list dense tile class="pt-0">
                             <v-list-item-group>
                                 <v-layout>
                                     <v-subheader class="text-uppercase">Notifications</v-subheader>
@@ -90,12 +90,28 @@
                                             <v-list-item-subtitle>
                                                 {{ item.data.notification }} | <b> {{ item.date }}</b>
                                             </v-list-item-subtitle>
-
-                                            <!-- <v-list-item-title>
-                                                {{ item.data.notification }} | <b> {{ item.date }}</b>
-                                            </v-list-item-title> -->
                                         </v-list-item-content>
 
+                                    </v-list-item>
+                                    <v-divider v-if="index + 1 < notifications.length" :key="index"></v-divider>
+                                </template>
+                            </v-list-item-group>
+              </v-list>-->
+
+                        <v-list nav dense>
+                            <v-list-item-group v-model="item" color="primary">
+                                <template v-for="(item, index) in notifications">
+                                    <v-list-item :key="item.id">
+                                        <v-list-item-icon v-if="item.icon">
+                                            <div v-html="item.icon"></div>
+                                        </v-list-item-icon>
+
+                                        <v-list-item-content>
+                                            <v-list-item-title>
+                                                {{ item.data.notification }} |
+                                                <b>{{ item.date }}</b>
+                                            </v-list-item-title>
+                                        </v-list-item-content>
                                     </v-list-item>
                                     <v-divider v-if="index + 1 < notifications.length" :key="index"></v-divider>
                                 </template>
@@ -225,11 +241,11 @@
                         </v-list>
 
                     </v-card>
-                </v-menu> -->
+          </v-menu>-->
 
                 <!-- <v-btn text icon color="primary" @click="getNotifications">
                     <v-icon>mdi-refresh</v-icon>
-                </v-btn> -->
+          </v-btn>-->
 
                 <!-- computer -->
                 <div class="d-none d-sm-flex d-md-flex d-lg-flex d-xl-flex align-center ml-2" v-if="!$auth.check()">
@@ -308,7 +324,6 @@
                             <v-icon>{{ item.icon }}</v-icon>
                         </v-btn>
                     </div>
-
                 </v-col>
             </v-row>
 
@@ -400,7 +415,6 @@ export default {
         this.$vuetify.theme.dark = this.$store.state.app.dark;
         this.$root.$snackbar = this.$refs.snackbar.show;
         this.$root.$confirm = this.$refs.confirm.open;
-        this.getNotifications()
         /* Get available translations */
         getAvailableLanguages().then(result => (this.languages = result));
 
@@ -415,18 +429,24 @@ export default {
         locale = this.$auth.check() ? this.$auth.user().locale : locale;
         this.locale = locale;
         this.moment.locale(this.locale.substr(0, 2));
-
-        setInterval(() => {
-            this.getNotifications()
-        }, 10000);
+        if (this.$auth.check()) {
+            if (this.$auth.user().role === 2) {
+                this.getNotifications();
+                setInterval(() => {
+                    this.getNotifications();
+                }, 10000);
+            }
+        }
     },
     methods: {
         markAsRead() {
-            this.axios.post("/notifications")
+            this.axios
+                .post("/notifications")
                 .then(response => {
                     console.log(response);
-                    this.getNotifications()
-                }).catch((error) => {
+                    this.getNotifications();
+                })
+                .catch(error => {
                     console.log(error);
                 });
         },
@@ -452,8 +472,8 @@ export default {
                     }
                 })
                 .then(response => {
-                    this.notifications = response.data.notifications
-                    this.notification_count = response.data.notification_count
+                    this.notifications = response.data.notifications;
+                    this.notification_count = response.data.notification_count;
                     // this.locales = this.$_.toPairs(response.data);
                     this.locales = this.$_.toPairs({
                         en: "English",
@@ -544,11 +564,12 @@ export default {
                             to: {
                                 name: "settings.profile"
                             }
-                        }, {
-                            label: this.$t('get_help'),
-                            icon: 'mdi-help',
+                        },
+                        {
+                            label: this.$t("get_help"),
+                            icon: "mdi-help",
                             to: {
-                                name: 'contact'
+                                name: "contact"
                             }
                         },
                         {
@@ -594,11 +615,12 @@ export default {
                             to: {
                                 name: "settings.profile"
                             }
-                        }, {
-                            label: this.$t('get_help'),
-                            icon: 'mdi-help',
+                        },
+                        {
+                            label: this.$t("get_help"),
+                            icon: "mdi-help",
                             to: {
-                                name: 'contact'
+                                name: "contact"
                             }
                         }
                     ];
@@ -653,11 +675,12 @@ export default {
                             to: {
                                 name: "settings.profile"
                             }
-                        }, {
-                            label: this.$t('get_help'),
-                            icon: 'mdi-help',
+                        },
+                        {
+                            label: this.$t("get_help"),
+                            icon: "mdi-help",
                             to: {
-                                name: 'contact'
+                                name: "contact"
                             }
                         },
                         {
@@ -673,11 +696,12 @@ export default {
                             to: {
                                 name: "settings.business.subscription"
                             }
-                        }, {
-                            label: this.$t('business_promo'),
-                            icon: 'mdi-account-arrow-right',
+                        },
+                        {
+                            label: this.$t("business_promo"),
+                            icon: "mdi-account-arrow-right",
                             to: {
-                                name: 'business.promo'
+                                name: "business.promo"
                             }
                         }
                     ];
@@ -712,11 +736,12 @@ export default {
                             to: {
                                 name: "settings.profile"
                             }
-                        }, {
-                            label: this.$t('get_help'),
-                            icon: 'mdi-help',
+                        },
+                        {
+                            label: this.$t("get_help"),
+                            icon: "mdi-help",
                             to: {
-                                name: 'contact'
+                                name: "contact"
                             }
                         }
                     ];

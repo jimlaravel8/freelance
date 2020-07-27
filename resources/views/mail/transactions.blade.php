@@ -36,7 +36,7 @@
   - Alternatively, we can arrange pickup.
 
 ### Squeeze Cash
-- Send XCD invoice amount to: SQ03017
+- Send XCD invoice amount to: SQ04269
  - Please include your invoice number(s)
 
 

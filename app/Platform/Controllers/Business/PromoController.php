@@ -52,7 +52,7 @@ class PromoController extends Controller
         $customer_count = 0;
         // $icon = ;
         foreach ($customers as $value) {
-            $message = 'Message from ' . auth()->user()->business_name . ' ' . $request->promo_message;
+            $message = 'Message from: ' . auth()->user()->business_name . ' ' . $request->promo_message;
             $user = User::find($value['customer_id']);
             // return $value['no_count'];
             if ($value['no_count'] > 1) {

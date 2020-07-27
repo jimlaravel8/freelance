@@ -102,7 +102,7 @@
                             <v-list-item two-line>
                               <v-list-item-content>
                                 <v-list-item-title>Squeeze Cash</v-list-item-title>
-                                <v-list-item-subtitle>Send XCD invoice amount to: SQ03017</v-list-item-subtitle>
+                                <v-list-item-subtitle>Send XCD invoice amount to: SQ04269</v-list-item-subtitle>
                                 <v-list-item-subtitle>Please include your invoice number(s)</v-list-item-subtitle>
                               </v-list-item-content>
                             </v-list-item>
@@ -452,3 +452,5 @@ export default {
   color: #000 !important;
 }
 </style>
+
+

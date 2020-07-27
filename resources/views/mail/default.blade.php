@@ -20,7 +20,7 @@
 <?php } ?>
 
 <?php if($md_enabled == "points_issued"){ ?>
-  Congrats **{{ $customer_name }}**! You've got **{{ $points }}** points from **{{ $business_name }}**
+  Congrats **{{ $customer_name }}**! You've got **{{ $points }}** point(s) from **{{ $business_name }}**
 <?php } ?>
 
 <?php if($md_enabled == "points_redeemed"){ ?>

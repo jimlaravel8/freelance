@@ -56,7 +56,7 @@
                                                     <v-list-item two-line>
                                                         <v-list-item-content>
                                                             <v-list-item-title>Squeeze Cash</v-list-item-title>
-                                                            <p>Send XCD invoice amount to: SQ03017</p>
+                                                            <p>Send XCD invoice amount to: SQ04269</p>
                                                             <p>Please include your invoice number(s)</p>
                                                         </v-list-item-content>
                                                     </v-list-item>

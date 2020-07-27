@@ -1,5 +1,5 @@
 <template>
-<div class="viewContainer" v-resize="onResize">
+<div class="viewContainer" v-resize="onResize" id="earn">
     <v-container class="pa-0">
         <v-img :src="tabImg" :key="tabImg" :min-height="tabImgHeight" :aspect-ratio="tabImgAspectRation" transition="fade-transition">
             <v-container class="inner-container">
@@ -31,9 +31,36 @@
                                                     </v-icon>
                                                 </template>
                                             </v-rating> -->
-                                   
 
-                                        <v-tooltip top max-width="340" color="NavBg NagFg--text">
+                                        <!-- <v-tooltip bottom v-model="show">
+                                            <template v-slot:activator="{ on, attrs }">
+                                                <v-rating v-model="rating" v-bind="attrs" v-on="on">
+                                                    <template v-slot:item="props">
+                                                        <v-icon :color="props.isFilled ? genColor(props.index) : 'grey lighten-1'" large @click="show = !show">
+                                                            {{ props.isFilled ? 'mdi-star-circle' : 'mdi-circle-outline' }}
+                                                        </v-icon>
+                                                    </template>
+                                                </v-rating>
+                                            </template>
+                                            <span>Programmatic tooltip</span>
+                                        </v-tooltip> -->
+
+                                        <v-tooltip bottom v-model="show" max-width="340" color="NavBg NagFg--text">
+                                            <template v-slot:activator="{ on, attrs }">
+                                                <!-- <v-btn icon v-bind="attrs" v-on="on"> -->
+                                                <v-rating v-model="ratings" v-bind="attrs" v-on="on">
+                                                    <template v-slot:item="props">
+                                                        <v-icon :color="props.isFilled ? genColor(props.index) : 'grey lighten-1'" large @click="show = !show">
+                                                            {{ props.isFilled ? 'mdi-star-circle' : 'mdi-star-outline' }}
+                                                        </v-icon>
+                                                    </template>
+                                                </v-rating>
+                                                <!-- </v-btn> -->
+                                            </template>
+                                            <span>Earn stars based on the number of times you earn points. These are the levels: 1 Star: 0-25, 2 Stars: 26-50, 3 Stars: 51-100, 4 Stars: 101-200,5 Stars 201 and above.</span>
+                                        </v-tooltip>
+
+                                        <!-- <v-tooltip v-model="show" bottom max-width="340" color="NavBg NagFg--text">
                                             <template v-slot:activator="{ on }">
                                                 <v-rating v-model="ratings" readonly v-on="on">
                                                     <template v-slot:item="props">
@@ -44,8 +71,8 @@
                                                 </v-rating>
                                             </template>
                                             <span>Earn stars based on the number of times you earn points. These are the levels: 1 Star: 0-25, 2 Stars: 26-50, 3 Stars: 51-100, 4 Stars: 101-200,5 Stars 201 and above.</span>
-                                            <!-- <span v-html="$t('earn_points_info')"></span> -->
-                                        </v-tooltip>
+
+                                        </v-tooltip> -->
                                         <!-- </v-card-title> -->
                                         <v-card-text>
                                             <p class="mb-0 fg--text subtitle-1">
@@ -92,6 +119,7 @@ export default {
         tabImgs: [],
         colors: ['green', 'purple', 'orange', 'indigo', 'red'],
         ratings: 0,
+        show: false,
 
     }),
     created() {
@@ -167,3 +195,11 @@ export default {
     }
 };
 </script>
+
+<style scoped>
+/* #earn .text--lighten-1 {
+    font-size: 32px !important;
+    border: 1px solid !important;
+    padding: 0 !important;
+} */
+</style>
