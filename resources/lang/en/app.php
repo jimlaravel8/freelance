@@ -522,5 +522,6 @@ return [
   'get_help' => 'Get Help',
 
   'business_promo' => 'Promotions',
+  'analytics' => 'Analytics',
 
 ];

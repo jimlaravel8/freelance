@@ -491,6 +491,7 @@ class BusinessesController extends \App\Http\Controllers\Controller
 
         $transactions = $transactions->map(function ($transaction) use ($staff, $business) {
             return [
+                // 'business_id' => $business['name'],
                 'uuid' => $transaction->uuid,
                 'customer_number' => $transaction->customer->whatsapp,
                 //   'customer_number' => $transaction->customer_number,
@@ -500,7 +501,8 @@ class BusinessesController extends \App\Http\Controllers\Controller
                 'staff_name' => $transaction->staff_first_name . ' ' . $transaction->staff_last_name,
                 'staff_email' => $transaction->staff_email,
                 'expires_at' => ($transaction->expires_at !== null) ? $transaction->expires_at->timezone($staff->getTimezone())->format('Y-m-d H:i:s') : null,
-                'created_at' => $transaction->created_at->timezone($staff->getTimezone())->format('Y-m-d H:i:s')
+                'created_at' => $transaction->created_at->timezone($staff->getTimezone())->format('Y-m-d H:i:s'),
+                'purchase_amount' => $transaction->purchase_amount,
             ];
         });
 
@@ -529,5 +531,41 @@ class BusinessesController extends \App\Http\Controllers\Controller
     {
         $user = auth()->user();
         $query = \Platform\Models\History::where('user_id', $user->id)->orderBy('created_at', 'desc');
+    }
+
+    public function getStats(Request $request) {
+        $stats = auth()->user()->getAdminStats();
+        return response()->json($stats, 200);
+    }
+
+    public function getDailyPoints()
+    {
+        $earned = DB::table('history')->select(DB::raw('sum(points) as points_earned'))
+            ->whereDate('created_at', Carbon::now()->toDateString())
+            ->where('points', '>', 0)
+            ->get();
+
+        $count_issuance = DB::table('history')
+            ->whereDate('created_at', Carbon::now()->toDateString())
+            ->where('points', '>', 0)
+            ->count();
+
+        $count_redemption = DB::table('history')
+            ->whereDate('created_at', Carbon::now()->toDateString())
+            ->where('points', '<', 0)
+            ->count();
+
+
+        $redeemed = DB::table('history')->select(DB::raw('ABS(sum(points)) as points_spent'))
+            ->whereDate('created_at', Carbon::now()->toDateString())
+            ->where('points', '<', 0)
+            ->get();
+        return array_merge(
+            $earned->toArray(),
+            $redeemed->toArray(),
+            ['total_businesses' => Business::count()],
+            ['count_issuance' => $count_issuance],
+            ['count_redemption' => $count_redemption]
+        );
     }
 }

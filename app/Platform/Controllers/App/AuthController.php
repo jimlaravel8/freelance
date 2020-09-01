@@ -240,11 +240,23 @@ class AuthController extends \App\Http\Controllers\Controller
     {
         $locale = request('locale', config('default.language'));
         app()->setLocale($locale);
+        $field = $request->field;
 
-        $v = Validator::make($request->all(), [
-            'email' => 'required|email|max:64',
-            'password' => 'required|min:6|max:24'
-        ]);
+        if ($field == 'email') {
+            $v = Validator::make($request->all(), [
+                'email' => 'required|email|max:64',
+                'password' => 'required|min:6|max:24'
+            ]);
+        } else {
+            $v = Validator::make($request->all(), [
+                'phone' => 'required|numeric',
+                'password' => 'required|min:6|max:24'
+            ]);
+        }
+        // $v = Validator::make($request->all(), [
+        //     'email' => 'required|email|max:64',
+        //     'password' => 'required|min:6|max:24'
+        // ]);
 
         if ($v->fails()) {
             return response()->json([
@@ -255,7 +267,7 @@ class AuthController extends \App\Http\Controllers\Controller
 
         $remember = (bool) $request->get('remember', false);
 
-        $credentials = $request->only('email', 'password');
+        $credentials = $request->only($field, 'password');
         $credentials['active'] = 1;
 
         if ($token = $this->guard()->attempt($credentials, $remember)) {

@@ -33,19 +33,16 @@
                                         </v-card-title>
                                         <v-card-text>
                                             <v-divider />
-                                            <v-data-table :loading="loading" :loading-text="$t('loading_items')" :no-data-text="$t('no_data_available')" :no-results-text="$t('no_results_found')" :headers="headers" :items="transactions" :items-per-page="5" multi-sort :search="search" class="elevation-1" :footer-props="{
-                            itemsPerPageOptions: itemsPerPageOptions,
-                            itemsPerPageText: $t('rows_per_page'),
-                            itemsPerPageAllText: $t('all'),
-                            pageText: $t('page_of'),
-                            showFirstLastPage: true,
-                            firstIcon: 'mdi-chevron-double-left',
-                            lastIcon: 'mdi-chevron-double-right',
-                            prevIcon: 'mdi-chevron-left',
-                            nextIcon: 'mdi-chevron-right'
-                          }">
+                                            <v-data-table :loading="loading" :loading-text="$t('loading_items')" :no-data-text="$t('no_data_available')" :no-results-text="$t('no_results_found')" :headers="headers" :items="transactions" :items-per-page="5" multi-sort :search="search" class="elevation-1" :footer-props="{ itemsPerPageOptions: itemsPerPageOptions, itemsPerPageText: $t('rows_per_page'), itemsPerPageAllText: $t('all'), pageText: $t('page_of'), showFirstLastPage: true, firstIcon: 'mdi-chevron-double-left', lastIcon: 'mdi-chevron-double-right', prevIcon: 'mdi-chevron-left', nextIcon: 'mdi-chevron-right' }">
                                                 <template v-slot:item.points="{ item }">{{ formatNumber(item.points) }}</template>
                                                 <template v-slot:item.value="{ item }" v-if="business">{{ formatCurrency(item.value) }}</template>
+                                                <template v-slot:item.event="{ item }" v-if="business">
+                                                    <div>
+                                                        <p>{{ item.event }}</p>
+                                                        <v-chip small>XCD {{ item.purchase_amount }}</v-chip>
+                                                    </div>
+
+                                                </template>
                                                 <template v-slot:item.expires_at="{ item }">{{ formatDate(item.expires_at, 'ago') }}</template>
                                                 <template v-slot:item.created_at="{ item }">{{ formatDate(item.created_at, 'lll') }}</template>
                                             </v-data-table>

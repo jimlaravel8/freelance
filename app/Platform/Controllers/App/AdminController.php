@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Hash;
+use Platform\Models\Business;
 
 class AdminController extends \App\Http\Controllers\Controller
 {
@@ -25,17 +26,23 @@ class AdminController extends \App\Http\Controllers\Controller
     /**
      * Get admin stats.
      *
-     * @return \Symfony\Component\HttpFoundation\Response 
+     * @return \Symfony\Component\HttpFoundation\Response
      */
     public function getStats(Request $request) {
-        $stats = auth()->user()->getAdminStats();
+        $stats = auth()->user()->getAdminStats('7days');
         return response()->json($stats, 200);
     }
 
+    public function statsfilter(Request $request) {
+        // return $request->all();
+        $date_range = $request->date;
+        $stats = auth()->user()->getAdminStats($date_range);
+        return response()->json($stats, 200);
+    }
     /**
      * Get branding data.
      *
-     * @return \Symfony\Component\HttpFoundation\Response 
+     * @return \Symfony\Component\HttpFoundation\Response
      */
     public function getBranding(Request $request) {
         $user = auth()->user();
@@ -57,7 +64,7 @@ class AdminController extends \App\Http\Controllers\Controller
     /**
      * Update branding.
      *
-     * @return \Symfony\Component\HttpFoundation\Response 
+     * @return \Symfony\Component\HttpFoundation\Response
      */
     public function postUpdateBranding(Request $request) {
         if (auth()->user()->app_demo == 1) return;
@@ -73,8 +80,8 @@ class AdminController extends \App\Http\Controllers\Controller
 
     /**
      * Get existing business categories
-     * 
-     * @return \Symfony\Component\HttpFoundation\Response 
+     *
+     * @return \Symfony\Component\HttpFoundation\Response
      */
     public function getAllCategories() {
         $categories = \DB::table('business_categories')->get(['id', 'name', 'short_description']);
@@ -83,7 +90,7 @@ class AdminController extends \App\Http\Controllers\Controller
 
     /**
      * Get a specific category
-     * 
+     *
      * @return \Symfony\Component\HttpFoundation\Response
      */
     public function getCategory($id) {
@@ -93,8 +100,8 @@ class AdminController extends \App\Http\Controllers\Controller
 
     /**
      * Create a new category
-     * 
-     * @return \Symfony\Component\HttpFoundation\Response 
+     *
+     * @return \Symfony\Component\HttpFoundation\Response
      */
     public function createNewCategory(Request $request) {
         $request->validate([
@@ -107,14 +114,14 @@ class AdminController extends \App\Http\Controllers\Controller
 
         return response()->json([ 'message' =>
             $inserted ?
-            'You\'ve successfully created a new category.': 
+            'You\'ve successfully created a new category.':
             'An error occured while creating a category'
         ]);
     }
 
     /**
      * Update an existing category.
-     * 
+     *
      * @return \Symfony\Component\HttpFoundation\Response
      */
     public function updateExistingCategory(Request $request, $id) {
@@ -126,7 +133,7 @@ class AdminController extends \App\Http\Controllers\Controller
             'name' => $request->name
         ]);
 
-        return response()->json(['message' => 
+        return response()->json(['message' =>
             $updated >= 1 ?
             'Updated the category successfully.' :
             'Nothing were updated.'
@@ -135,7 +142,7 @@ class AdminController extends \App\Http\Controllers\Controller
 
     /**
      * Delete an existing category.
-     * 
+     *
      * @return \Symfony\Component\HttpFoundation\Response
      */
     public function deleteAnExistingCategory(Request $request, $id) {
@@ -146,6 +153,22 @@ class AdminController extends \App\Http\Controllers\Controller
             'Deleted the category successfully.' :
             'Nothing were deleted.'
         ]);
+    }
+
+    public function business_report(Request $request)
+    {
+        $date_arr = $request->date;
+        $businesses = Business::with('histories')->get();
+        $businesses->transform(function($business) {
+            $billings = 0;
+            foreach ($business->histories as $key => $value) {
+                // dd($value['points']);
+                $billings += $value['points'] * $business['point_value'];
+            }
+            $business->billings = $billings;
+            return $business;
+        });
+        return $businesses;
     }
 }
 

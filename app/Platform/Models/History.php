@@ -75,4 +75,9 @@ class History extends Model
     public function staff() {
       return $this->hasOne(\App\USer::class, 'id', 'staff_id');
     }
+
+    public function business()
+    {
+        return $this->belongsTo(Business::class, 'business_id');
+    }
 }

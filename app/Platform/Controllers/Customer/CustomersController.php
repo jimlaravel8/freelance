@@ -139,15 +139,15 @@ class CustomersController extends \App\Http\Controllers\Controller
     public function getcustomerBadge()
     {
         $badge = History::where('customer_id', auth()->user()->id)->count();
-        if ($badge >= 25 && $badge < 50) {
+        if ($badge <= 25) {
             return 1;
-        } elseif ($badge >= 50 && $badge < 100) {
+        } elseif ($badge >= 26 && $badge < 50) {
             return 2;
-        } elseif ($badge >= 100 && $badge < 200) {
+        } elseif ($badge >= 51 && $badge < 100) {
             return 3;
-        } elseif ($badge >= 200 && $badge < 300) {
+        } elseif ($badge >= 101 && $badge < 200) {
             return 4;
-        } elseif ($badge >= 300) {
+        } elseif ($badge >= 201) {
             return 5;
         }
     }

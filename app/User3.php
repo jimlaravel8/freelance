@@ -649,11 +649,20 @@ class User extends Authenticatable implements JWTSubject, HasLocalePreference, H
         $admin = [
             ['text' => trans('app.edit'), 'action' => 'edit', 'icon' => 'mdi-pencil', 'color' => 'accent'],
             ['text' => trans('app.delete'), 'action' => 'delete', 'icon' => 'mdi-delete-outline', 'color' => 'accent'],
+            ['text' => trans('app.password'), 'action' => 'edit_password', 'icon' => 'mdi-lock', 'color' => 'accent'],
             ['divider'],
             ['text' => trans('app.log_in_to_account'), 'action' => 'log_in_as', 'icon' => 'mdi-login', 'color' => 'accent'],
         ];
 
-        $business = $admin;
+        $business = [
+            ['text' => 'Payments', 'action' => 'open_payments', 'icon' => 'mdi-cash', 'color' => 'green'],
+            ['text' => trans('app.edit'), 'action' => 'edit', 'icon' => 'mdi-pencil', 'color' => 'accent'],
+            ['text' => trans('app.delete'), 'action' => 'delete', 'icon' => 'mdi-delete-outline', 'color' => 'accent'],
+            ['divider'],
+            ['text' => trans('app.log_in_to_account'), 'action' => 'log_in_as', 'icon' => 'mdi-login', 'color' => 'accent'],
+        ];
+
+        // $business = $admin;
 
         return [
             1 => $admin,
@@ -664,6 +673,7 @@ class User extends Authenticatable implements JWTSubject, HasLocalePreference, H
     /**
      * Admin stats
      */
+    // public function getAdminStats($statsPeriod)
     public function getAdminStats($statsPeriod = '7days')
     {
         // Totals
@@ -671,16 +681,24 @@ class User extends Authenticatable implements JWTSubject, HasLocalePreference, H
             'users' => $this->users->count()
         ];
 
+        // $statsPeriod = '7days';
+
         // Period
         if ($statsPeriod == '7days') {
             $from = now()->addDays(-7);
             $to = now();
             $fromPrevious = now()->addDays(-15);
             $toPrevious = now()->addDays(-8);
+        } else {
+            $from = $statsPeriod[0];
+            $to = $statsPeriod[1];
+            $fromPrevious = $statsPeriod[0];
+            $toPrevious = $statsPeriod[1];
         }
 
         // User signups for current period
         $period = new \DatePeriod(new \DateTime($from), new \DateInterval('P1D'), new \DateTime($to));
+        // dd($period);
 
         $range = [];
         foreach ($period as $date) {
@@ -1021,9 +1039,115 @@ class User extends Authenticatable implements JWTSubject, HasLocalePreference, H
             return $value;
         }
     }
- 
+
     public function promos()
     {
         return $this->hasMany(Promo::class);
+    }
+
+    public static function getPasswordForm()
+    {
+        $admin = [
+            'tab1' => [
+                'text' => trans('app.account'),
+                'subs' => [
+                    'sub1' => [
+                        'items' => [
+                            ['type' => 'password', 'column' => 'password', 'text' => trans('app.password'), 'validate' => 'required|min:6', 'required' => true],
+                        ]
+                    ]
+                ]
+            ]
+        ];
+
+
+        return [
+            1 => $admin,
+        ];
+    }
+
+
+
+
+    /**
+     * Admin stats
+     */
+    public function getBusinessStats($statsPeriod = '7days')
+    {
+        // Totals
+        $totals = [
+            'users' => $this->users->count()
+        ];
+
+        $business = auth()->user()->getBusiness(true);
+        $business_id = $business['business_id'];
+        // Period
+        if ($statsPeriod == '7days') {
+            $from = now()->addDays(-7);
+            $to = now();
+            $fromPrevious = now()->addDays(-15);
+            $toPrevious = now()->addDays(-8);
+        }
+
+        // User signups for current period
+        $period = new \DatePeriod(new \DateTime($from), new \DateInterval('P1D'), new \DateTime($to));
+
+        $range = [];
+        foreach ($period as $date) {
+            $range[$date->format("Y-m-d")] = 0;
+        }
+
+        $data = $this->users()
+            ->select([
+                DB::raw('DATE(`created_at`) as `date`'),
+                DB::raw('COUNT(id) as `count`')
+            ])
+            ->whereBetween('created_at', [$from, $to])
+            ->where('role', 2)
+            ->groupBy('date')
+            ->get()
+            /*
+          ->groupBy(function ($val) {
+              return Carbon::parse($val->created_at)->format('d');
+          })*/
+            ->pluck('count', 'date');
+
+        $dbData = [];
+        $total = 0;
+        if ($data !== null) {
+            foreach ($data as $date => $count) {
+                $dbData[$date] = (int) $count;
+                $total += $count;
+            }
+        }
+
+        $businessSignups = array_replace($range, $dbData);
+        $businessSignupsTotal = $total;
+
+        // Customer signups for previous period
+        $period = new \DatePeriod(new \DateTime($fromPrevious), new \DateInterval('P1D'), new \DateTime($toPrevious));
+        $data = $this->users()
+            ->select([
+                DB::raw('COUNT(id) as `count`')
+            ])
+            ->where('role', 2)
+            ->whereBetween('created_at', [$fromPrevious, $toPrevious])
+            ->get()
+            ->pluck('count');
+
+        $businessSignupsTotalPrevious = (int) $data[0];
+
+        $stats = [
+            'version' => config('version.current'),
+            'total' => $totals,
+            'users' => [
+                'signupsCurrentPeriod' => $businessSignups,
+                'signupsCurrentPeriodTotal' => $businessSignupsTotal,
+                'signupsPreviousPeriodTotal' => $businessSignupsTotalPrevious,
+                'signupsChange' => $businessSignupsTotal - $businessSignupsTotalPrevious
+            ]
+        ];
+
+        return $stats;
     }
 }

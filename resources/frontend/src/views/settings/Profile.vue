@@ -38,18 +38,14 @@
                                     <v-container class="pa-0">
                                         <v-row no-gutters>
                                             <v-col cols="12" sm="9" md="6">
-                                                <!-- <v-row>
-                            <v-col cols="12" sm="6" class="pt-0 pb-8">
-                              <input
-                                type="file"
-                                style="display: none"
-                                id="avatar"
-                                name="avatar"
-                                accept="image/*"
-                                @change="onFilePicked"
-                              />
-                            </v-col>
-                          </v-row>-->
+                                                <v-row>
+                                                    <!-- <v-col cols="12" sm="6" class="pt-0 pb-8">
+                                                        <input type="file" id="avatar" name="avatar" accept="image/*" @change="onFilePicked" />
+                                                    </v-col> -->
+                                                    <v-col cols="12" sm="6" class="pt-0 pb-8">
+                                                        <img :src="$auth.user().avatar" :alt="form1.first_name" style="width: 50px; border-radius: 50%; height: 50px;" />
+                                                    </v-col>
+                                                </v-row>
                                                 <v-row>
                                                     <v-col cols="12" sm="6" class="py-0">
                                                         <x-text-field v-model="form1.first_name" ref="form1.first_name" id="form1.first_name" :label="$t('first_name')" :name="$t('first_name')" rules="required|min:1|max:32" dense />

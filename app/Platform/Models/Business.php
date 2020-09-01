@@ -21,8 +21,8 @@ class Business extends Model implements HasMedia
      * @var array
      */
     protected $fillable = [
-      'active', 
-      'name', 
+      'active',
+      'name',
     ];
 
     /**
@@ -323,7 +323,7 @@ class Business extends Model implements HasMedia
       $user = \App\User::where('id', $this->created_by)->first();
       return $user->getBusiness();
     }
- 
+
     /**
      * Relationships
      * -------------
@@ -336,5 +336,10 @@ class Business extends Model implements HasMedia
     public function promos()
     {
         return $this->hasMany(Promo::class);
+    }
+
+    public function histories()
+    {
+        return $this->hasMany(History::class, 'business_id');
     }
 }

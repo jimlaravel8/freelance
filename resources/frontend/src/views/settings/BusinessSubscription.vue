@@ -32,6 +32,7 @@
                                             <v-select class="ma-5" label="Select a year" v-model="billings.transactionYear" :items="billings.transactionYears" item-text="0" item-value="0"></v-select>
                                             <v-select class="ma-5" label="Select a month" v-model="billings.transactionMonth" :items="getMonths" item-text="text" item-value="value"></v-select>
                                             <div v-if="billings.loaded && billings.status_code == 200 && transactionMonth != ''" class="ma-5">
+                                                <v-input prepend-icon="mdi-sale" color="black" :messages="[`Total sales: ${this.billings.total_sale || 0}`]">Total Sales: {{this.billings.total_sale}}</v-input>
                                                 <v-input prepend-icon="mdi-trending-up" color="black" :messages="[`Points Issuance Sessions: ${this.billings.transaction_details.earnings.count || 0}`]">Total Points Issued: {{this.billings.transaction_details.earnings.amount}}</v-input>
                                                 <v-input prepend-icon="mdi-trending-down" color="black" :messages="[`Points Redemption Sessions: ${this.billings.transaction_details.spendings.count || 0}`]">Total Points Redeemed: {{this.billings.transaction_details.spendings.amount}}</v-input>
                                                 <v-input prepend-icon="mdi-clock" color="black" :messages="['Due Date (Net 7)']">{{this.billings.due_details.date}}</v-input>

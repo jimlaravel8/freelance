@@ -612,12 +612,21 @@ class User extends Authenticatable implements JWTSubject, HasLocalePreference, H
       $admin = [
         ['text' => 'Payments', 'action' => 'open_payments', 'icon' => 'mdi-cash', 'color' => 'green'],
         ['text' => trans('app.edit'), 'action' => 'edit', 'icon' => 'mdi-pencil', 'color' => 'accent'],
+        ['text' => trans('app.password'), 'action' => 'edit_password', 'icon' => 'mdi-lock', 'color' => 'accent'],
         ['text' => trans('app.delete'), 'action' => 'delete', 'icon' => 'mdi-delete-outline', 'color' => 'accent'],
         ['divider'],
         ['text' => trans('app.log_in_to_account'), 'action' => 'log_in_as', 'icon' => 'mdi-login', 'color' => 'accent'],
       ];
 
-      $business = $admin;
+      $business = [
+        ['text' => 'Payments', 'action' => 'open_payments', 'icon' => 'mdi-cash', 'color' => 'green'],
+        ['text' => trans('app.edit'), 'action' => 'edit', 'icon' => 'mdi-pencil', 'color' => 'accent'],
+        ['text' => trans('app.delete'), 'action' => 'delete', 'icon' => 'mdi-delete-outline', 'color' => 'accent'],
+        ['divider'],
+        ['text' => trans('app.log_in_to_account'), 'action' => 'log_in_as', 'icon' => 'mdi-login', 'color' => 'accent'],
+      ];
+
+    //   $business = $admin;
 
       return [
         1 => $admin,
@@ -980,5 +989,22 @@ class User extends Authenticatable implements JWTSubject, HasLocalePreference, H
     public function promos()
     {
         return $this->hasMany(Promo::class);
+    }
+
+
+
+    public static function getPasswordForm() {
+        $admin = [
+          'tab1' => [
+            'text' => trans('app.account'),
+            'subs' => [
+              'sub1' => [
+                'items' => [
+                  ['type' => 'password', 'column' => 'password', 'text' => trans('app.password'), 'validate' => 'required|min:6', 'required' => true],
+                ]
+              ]
+            ]
+          ]
+        ];
     }
 }

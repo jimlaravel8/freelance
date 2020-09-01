@@ -264,6 +264,31 @@ const routes = [
             }
         }
     },
+
+
+    {
+        path: "/",
+        component: MasterLayout,
+        children: [
+            {
+                path: "/business/analytics",
+                name: "business.analytics",
+                components: {
+                    primary: () =>
+                        import(
+                            /* webpackChunkName: "x434a" */ "../views/business/Analytics.vue"
+                        )
+                }
+            }
+        ],
+        meta: {
+            auth: {
+                roles: [3]
+            }
+        }
+    },
+
+
     {
         path: "/",
         component: MasterLayout,
@@ -560,6 +585,30 @@ const routes = [
             }
         }
     },
+
+
+    {
+        path: "/",
+        component: MasterLayout,
+        children: [
+            {
+                path: "/admin/business_report",
+                name: "admin.business_report",
+                components: {
+                    primary: () =>
+                        import(
+                            /* webpackChunkName: "x434a" */ "../views/admin/BusinessReport.vue"
+                        )
+                }
+            }
+        ],
+        meta: {
+            auth: {
+                roles: [1]
+            }
+        }
+    },
+
     {
         path: "/",
         component: MasterLayout,

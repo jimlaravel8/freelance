@@ -630,7 +630,7 @@ export default {
                         },
                         {
                             label: this.$t("issue_points"),
-                            icon: "mdi-coins",
+                            icon: "mdi-coin",
                             to: {
                                 name: "business.issue-points"
                             }
@@ -695,6 +695,13 @@ export default {
                             icon: "mdi-domain",
                             to: {
                                 name: "settings.business.subscription"
+                            }
+                        },
+                        {
+                            label: this.$t("analytics"),
+                            icon: "mdi-google-analytics",
+                            to: {
+                                name: "business.analytics"
                             }
                         },
                         {

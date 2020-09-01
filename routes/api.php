@@ -62,6 +62,11 @@ Route::group(['middleware' => 'auth:api'], function () {
     Route::group(['prefix' => 'admin', 'middleware' => 'role:1'], function () {
         Route::get('stats', '\Platform\Controllers\App\AdminController@getStats');
 
+        Route::post('statsfilter', '\Platform\Controllers\App\AdminController@statsfilter');
+
+
+        Route::get('business_report', '\Platform\Controllers\App\AdminController@business_report');
+
         // Daily Earned Points
         Route::get('dailypoints', '\Platform\Controllers\App\StatisticsController@getDailyPoints');
         Route::get('redeemedpoints', '\Platform\Controllers\App\StatisticsController@getDailyRedeemedPointsByHours');
@@ -132,6 +137,10 @@ Route::group(['middleware' => 'auth:api'], function () {
 
         // Route::get('transactions', '\Platform\Controllers\App\TransactionsController@getCurrentMonthTransactions');
         Route::get('transaction/{date}', '\Platform\Controllers\App\TransactionsController@getMonthlyTransactions');
+
+        Route::get('stats', '\Platform\Controllers\Business\BusinessesController@getStats');
+        Route::get('dailypoints', '\Platform\Controllers\Business\BusinessesController@getDailyPoints');
+
     });
 });
 
@@ -162,6 +171,9 @@ Route::group(['prefix' => 'app', 'middleware' => 'auth:api'], function () {
 
     // DataForm
     Route::get('data-form', '\Platform\Controllers\App\DataFormController@getDataForm');
+    Route::get('password-form', '\Platform\Controllers\App\DataFormController@getPasswordForm');
+    Route::post('password-form/save', '\Platform\Controllers\App\DataFormController@postSavePassword');
+
     Route::post('data-form/relation', '\Platform\Controllers\App\DataFormController@postGetRelation');
     Route::post('data-form/save', '\Platform\Controllers\App\DataFormController@postSaveRecord');
 });

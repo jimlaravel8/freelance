@@ -56,6 +56,7 @@ class TransactionsController extends \App\Http\Controllers\Controller {
                 "status_code" => 404
             ], 200);
         }
+        // dd($business->id);
         # Get all of the records on the given month & year.
         $records = History::whereMonth('created_at', $month)
         ->whereYear('created_at', $year)
@@ -123,6 +124,8 @@ class TransactionsController extends \App\Http\Controllers\Controller {
         //     ]
         // ]);
 
+        $total_sale = $earnings_return['amount'] + $spendings_return['amount'];
+
         return response()->json([
             'transactions' => $transactions_all,
             'transaction_details' => [
@@ -135,7 +138,8 @@ class TransactionsController extends \App\Http\Controllers\Controller {
                 'status' => $transactions->paid
             ],
             'invoice_no' => $transactions->invoice_no,
-            'transaction_fee' => $auth->transaction_fee
+            'transaction_fee' => $auth->transaction_fee,
+            'total_sale' => $total_sale
         ]);
 
     }

@@ -1,7 +1,7 @@
 <template>
 <v-card>
     <v-toolbar :tabs="tabCount > 1" flat v-if="!loadingForm">
-        <v-toolbar-title>{{ (uuid === null ) ? translations.create_item : translations.edit_item }}</v-toolbar-title>
+        <v-toolbar-title>{{ (uuid === null) ? translations.create_item : translations.edit_item }}</v-toolbar-title>
         <v-spacer></v-spacer>
         <v-btn icon @click="$emit('data-list-events', {'closeDialog': true, 'reload': false})">
             <v-icon>mdi-close</v-icon>
@@ -117,88 +117,6 @@
 
                                         <input type="file" style="display: none" :id="form_item.column" :name="form_item.column" accept="image/*" @change="onFilePicked" />
                                     </div>
-                                    <!--
-
-                    <div v-if="form_item.type == 'currency'">
-                      <v-text-field
-                        type="number"
-                        ___autofocus="form_index == 0 && uuid == null"
-                        v-model="formModel[form_item.column]"
-                        :ref="form_item.column"
-                        :data-vv-name="form_item.column"
-                        :data-vv-as="form_item.text.toLowerCase()"
-                        v-validate="form_item.validate"
-                        :label="(form_item.required) ? form_item.text + $t('_required_') : form_item.text"
-                        :error-messages="errors.collect('formModel.' + form_item.column)"
-                        :prepend-inner-icon="form_item.icon"
-                        :placeholder="form_item.placeholder"
-                        :hint="form_item.hint"
-                        :persistent-hint="true"
-                        :prefix="form_item.prefix"
-                        :suffix="form_item.suffix"
-                      ></v-text-field>
-                    </div>
-
-                    <div v-if="form_item.type == 'color'">
-
-                      <color-picker
-                        ___autofocus="form_index == 0 && uuid == null"
-                        v-model="formModel[form_item.column]"
-                        :color="formModel[form_item.column]"
-                        :mode="form_item.mode || 'hexa'"
-                        :ref="form_item.column"
-                        :data-vv-name="form_item.column"
-                        :data-vv-as="form_item.text.toLowerCase()"
-                        v-validate="form_item.validate"
-                        :label="(form_item.required) ? form_item.text + $t('_required_') : form_item.text"
-                        :error-messages="errors.collect('formModel.' + form_item.column)"
-                        :prepend-inner-icon="form_item.icon"
-                        :placeholder="form_item.placeholder"
-                        :hint="form_item.hint"
-                        :persistent-hint="true"
-                        :prefix="form_item.prefix"
-                        :suffix="form_item.suffix"
-                      >
-                      </color-picker>
-
-                    </div>
-
-                    <div v-if="form_item.type == 'slider'">
-                      <v-slider
-                        ___autofocus="form_index == 0 && uuid == null"
-                        v-model="formModel[form_item.column]"
-                        :ref="form_item.column"
-                        :min="form_item.min"
-                        :max="form_item.max"
-                        :step="form_item.step"
-                        :data-vv-name="form_item.column"
-                        :data-vv-as="form_item.text.toLowerCase()"
-                        v-validate="form_item.validate"
-                        :label="(form_item.required) ? form_item.text + $t('_required_') : form_item.text"
-                        :error-messages="errors.collect('formModel.' + form_item.column)"
-                        :prepend-inner-icon="form_item.icon"
-                        :placeholder="form_item.placeholder"
-                        :hint="form_item.hint"
-                        :persistent-hint="true"
-                        :prefix="form_item.prefix"
-                        :suffix="form_item.suffix"
-                      >
-
-                        <template #append>
-                          <v-text-field
-                            v-model="formModel[form_item.column]"
-                            class="pt-0 mt-0"
-                            hide-details
-                            single-line
-                            type="number"
-                            style="width: 60px"
-                          ></v-text-field>
-                        </template>
-
-                      </v-slider>
-                    </div>
-
-                    -->
                                 </div>
                             </v-tab-item>
                         </v-tabs-items>
@@ -258,7 +176,7 @@ export default {
     },
     props: {
         api: {
-            default: "/app/data-form",
+            default: "/app/password-form",
             required: false,
             type: String
         },

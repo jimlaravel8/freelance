@@ -28,9 +28,10 @@ class DataFormController extends \App\Http\Controllers\Controller
     /**
      * This function generates the json response required for building the table form
      *
-     * @return \Symfony\Component\HttpFoundation\Response 
+     * @return \Symfony\Component\HttpFoundation\Response
      */
     public function getDataForm(Request $request) {
+        // return $request->all();
       $model = $request->model;
       $uuid = $request->uuid;
 
@@ -45,7 +46,7 @@ class DataFormController extends \App\Http\Controllers\Controller
       $settings = $model::getSettings()[auth()->user()->role];
       $permissions = $model::getPermissions()[auth()->user()->role];
       $actions = $model::getActions()[auth()->user()->role];
-      if ($uuid !== null && method_exists($model, 'getUpdateForm')) { 
+      if ($uuid !== null && method_exists($model, 'getUpdateForm')) {
         $form = $model::getUpdateForm()[auth()->user()->role];
       } else {
         $form = $model::getCreateForm()[auth()->user()->role];
@@ -340,7 +341,7 @@ class DataFormController extends \App\Http\Controllers\Controller
     /**
      * Get relationship data
      *
-     * @return \Symfony\Component\HttpFoundation\Response 
+     * @return \Symfony\Component\HttpFoundation\Response
      * /
     public function postGetRelation(Request $request) {
       $model = $request->model;
@@ -373,7 +374,7 @@ class DataFormController extends \App\Http\Controllers\Controller
     /**
      * Parse form settings
      *
-     * @return array 
+     * @return array
      */
     public function parseFormSettings($form, $create = true) {
       foreach ($form as $tab_key => $tab) {
@@ -420,7 +421,7 @@ class DataFormController extends \App\Http\Controllers\Controller
     /**
      * Save post
      *
-     * @return \Symfony\Component\HttpFoundation\Response 
+     * @return \Symfony\Component\HttpFoundation\Response
      */
     public function postSaveRecord(Request $request) {
       $model = $request->model;
@@ -443,7 +444,7 @@ class DataFormController extends \App\Http\Controllers\Controller
       $permissions = $model::getPermissions()[auth()->user()->role];
       $actions = $model::getActions()[auth()->user()->role];
       $defaults = (method_exists($model, 'getDefaultsClass')) ? $model::getDefaultsClass()[auth()->user()->role] : [];
-        if ($uuid !== null && method_exists($model, 'getUpdateForm')) { 
+        if ($uuid !== null && method_exists($model, 'getUpdateForm')) {
         $form = $model::getUpdateForm()[auth()->user()->role];
       } else {
         $form = $model::getCreateForm()[auth()->user()->role];
@@ -530,7 +531,7 @@ class DataFormController extends \App\Http\Controllers\Controller
 
         if ($query === false) {
           return response()->json(['status' => 'error', 'msg' => 'No permission to edit record'], 422);
-        } 
+        }
       }
 
       foreach ($values as $column => $value) {
@@ -551,7 +552,7 @@ class DataFormController extends \App\Http\Controllers\Controller
             }
           }
         } elseif($value['type'] == 'images') { // Process multi image upload
-          
+
         } elseif ($value['type'] == 'currency') {
           $multiplier = str_pad(1, auth()->user()->getCurrencyFormat('fraction_digits') + 1, 0);
           $query->{$column} = (is_numeric($value['value'])) ? $value['value'] * $multiplier : $value['value'];
@@ -595,5 +596,348 @@ class DataFormController extends \App\Http\Controllers\Controller
       }
 
       return response()->json(['status' => 'success'], 200);
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    public function getPasswordForm(Request $request) {
+        // return $request->all();
+
+
+        // return $request->all();
+      $model = $request->model;
+      $uuid = $request->uuid;
+
+      if (! class_exists($model)) {
+        return response()->json(['status' => 'error', 'msg' => 'Class does not exist'], 422);
+      }
+
+      //$account = app()->make('account');
+      $locale = request('locale', config('system.default_language'));
+      app()->setLocale($locale);
+
+      $settings = $model::getSettings()[auth()->user()->role];
+      $permissions = $model::getPermissions()[auth()->user()->role];
+      $actions = $model::getActions()[auth()->user()->role];
+      if ($uuid !== null && method_exists($model, 'getUpdateForm')) {
+        $form = $model::getPasswordForm()[auth()->user()->role];
+      } else {
+        $form = $model::getPasswordForm()[auth()->user()->role];
+      }
+      $extraSelectColumns = $model::getExtraSelectColumns()[auth()->user()->role];
+      $extraQueryColumns = $model::getExtraQueryColumns()[auth()->user()->role];
+      $translations = $model::getTranslations();
+      $limitationName = method_exists($model, 'getLimitationName') ? $model::getLimitationName() : '';
+
+      // Get columns for select query
+      $select = [];
+      $relations = [];
+      $dates = [];
+    //   return $form;
+      foreach ($form as $tab) {
+        foreach ($tab['subs'] as $sub) {
+          foreach ($sub['items'] as $item) {
+
+            if ($item['type'] == 'description' || $item['type'] == 'image' || $item['type'] == 'images' || ($item['type'] == 'relation' && $item['relation']['type'] == 'belongsToMany')) {
+              // Do nothing because these types have no columns
+            } else {
+              $select[] = $item['column'];
+            }
+
+            if ($item['type'] == 'date_time') {
+              $dates[] = $item['column'];
+            }
+
+            // Relations
+            if ($item['type'] == 'relation') {
+              $relation = $item['relation'];
+              $permission = (isset($relation['permission'])) ? $relation['permission'] : 'personal';
+              $where = (isset($relation['where'])) ? $relation['where'] : '';
+
+              if ($relation['type'] == 'hasOne' || $relation['type'] == 'belongsTo') {
+                if ($permission == 'all') {
+                  $items = $model::with($relation['with'])->getRelation($relation['with'])->selectRaw($relation['pk'] . ' as pk, ' . $relation['val'] . ' as val')->where(function($query) use($where) { if ($where != '') return $query->whereRaw($where); })->orderBy($relation['orderBy'], $relation['order'])->get();
+                } else {
+                  $items = $model::with($relation['with'])->getRelation($relation['with'])->selectRaw('' . $relation['pk'] . ' as pk, ' . $relation['val'] . ' as val')->where(function($query) use($where) { if ($where != '') return $query->whereRaw($where); })->where('created_by', auth()->user()->id)->orderBy($relation['orderBy'], $relation['order'])->get();
+                }
+
+                $items = $items->map(function ($item) use ($relation) {
+                  return ['pk' => $item->pk, 'val' => $item->val];
+                });
+
+                $items = $items->toArray();
+
+                $relations[$item['column']] = [
+                  'column' => $item['column'],
+                  'with' => $relation['with'],
+                  'type' => $relation['type'],
+                  'items' => $items
+                ];
+              }
+
+              if ($relation['type'] == 'belongsToMany') {
+                if ($permission == 'all') {
+                  $items = DB::table($relation['table'])->selectRaw($relation['pk'] . ' as pk, ' . $relation['val'] . ' as val')->where(function($query) use($where) { if ($where != '') return $query->whereRaw($where); })->orderBy($relation['orderBy'], $relation['order'])->get();
+                } else {
+                  $items = DB::table($relation['table'])->selectRaw('' . $relation['pk'] . ' as pk, ' . $relation['val'] . ' as val')->where(function($query) use($where) { if ($where != '') return $query->whereRaw($where); })->where('created_by', auth()->user()->id)->orderBy($relation['orderBy'], $relation['order'])->get();
+                }
+
+                $items = $items->map(function ($item) use ($relation) {
+                  return ['pk' => $item->pk, 'val' => $item->val];
+                });
+
+                $items = $items->toArray();
+
+                $relations[$relation['with']] = [
+                  'with' => $relation['with'],
+                  'type' => $relation['type'],
+                  'items' => $items
+                ];
+              }
+            }
+
+            if ($item['type'] == 'enum') {
+              $items = [];
+              foreach ($item['items'] as $key => $val) {
+                $items[] = [
+                  'pk' => $key,
+                  'val' => $val
+                ];
+              }
+
+              $relations[$item['column']] = [
+                'items' => $items
+              ];
+            }
+          }
+        }
+      }
+
+      // Defaults
+      $values = [];
+
+      if ($uuid !== null) {
+        // Query model
+        $query = $model::select(array_merge($select, $extraSelectColumns, $extraQueryColumns));
+
+        // Permission to view all records
+        if ($permissions['view'] == 'all') {
+          // Get result
+          $values = clone $query->withoutGlobalScopes()->whereUuid($uuid)->first();
+          //$allRecords = clone $query->withoutGlobalScopes()->get();
+        }
+
+        // Only records from account can be viewed
+        if ($permissions['view'] == 'account') {
+          $values = clone $query->whereUuid($uuid)->first();
+          //$allRecords = clone $query->get();
+        }
+
+        // Only records created by user can be viewed
+        if ($permissions['view'] == 'personal') {
+          $values = clone $query->withoutGlobalScopes()->whereUuid($uuid)->where('created_by', auth()->user()->id)->first();
+          //$allRecords = clone $query->where('created_by', auth()->user()->id)->get();
+        }
+
+        // Only records created by user can be viewed
+        if (Str::startsWith($permissions['view'], 'created_by:')) {
+          $created_by = explode(':', $permissions['delete']);
+          $created_by = explode(',', $created_by[1]);
+          $values = clone $query->withoutGlobalScopes()->whereUuid($uuid)->whereIn('created_by', $created_by)->first();
+          //$allRecords = clone $query->whereIn('created_by', $created_by)->get();
+        }
+      } else {
+        // Query model
+        $query = $model::select(array_merge($select, $extraSelectColumns, $extraQueryColumns));
+
+        // Permission to view all records
+        if ($permissions['view'] == 'all') {
+          // Get result
+          $allRecords = clone $query->withoutGlobalScopes()->get();
+        }
+
+        // Only records from account can be viewed
+        if ($permissions['view'] == 'account') {
+          $allRecords = clone $query->get();
+        }
+
+        // Only records created by user can be viewed
+        if ($permissions['view'] == 'personal') {
+          $allRecords = clone $query->withoutGlobalScopes()->where('created_by', auth()->user()->id)->get();
+        }
+
+        // Only records created by user can be viewed
+        if (Str::startsWith($permissions['view'], 'created_by:')) {
+          $created_by = explode(':', $permissions['delete']);
+          $created_by = explode(',', $created_by[1]);
+          $allRecords = clone $query->whereIn('created_by', $created_by)->get();
+        }
+      }
+
+      if (empty($values)) {
+        foreach ($form as $tab) {
+          foreach ($tab['subs'] as $sub) {
+            foreach ($sub['items'] as $item) {
+              if ($item['type'] == 'description') {
+                // Do nothing
+              } elseif ($item['type'] == 'relation' && ($item['relation']['type'] == 'hasOne' || $item['relation']['type'] == 'belongsTo')) {
+                $values[$item['column'] . '_loading'] = false;
+                $values[$item['column'] . '_search'] = null;
+                $values[$item['column'] . '_items'] = [];
+              } elseif ($item['type'] == 'relation' && $item['relation']['type'] == 'belongsToMany') {
+                // No column
+                $values[$item['relation']['with'] . '_items'] = [];
+              } else {
+                $column = (strpos($item['column'], '->') !== false) ? str_replace('->', '___', $item['column']) : $item['column'];
+                $values[$column] = (isset($item['default'])) ? $item['default'] : '';
+              }
+            }
+          }
+        }
+      }
+
+      // Parse additional settings
+      foreach ($form as $tab_key => $tab) {
+        foreach ($tab['subs'] as $sub_key => $sub) {
+          foreach ($sub['items'] as $i => $item) {
+            $new_column_name = isset($item['column']) ? $item['column'] : null;
+            // Parse JSON columns
+            if (isset($item['column']) && strpos($item['column'], '->') !== false) {
+              $columns = explode('->', $item['column']);
+              $column = 'json_unquote(json_extract(`' . $columns[0] . '`, \'$."' . $columns[1] . '"\'))';
+              //$column = $columns[0] . '->' . $columns[1];
+              $new_column_name = str_replace('->', '___', $item['column']);
+
+              //$value = (isset($values->{$column})) ? $values->{$column} : isset($values[$new_column_name]) ? $values[$new_column_name] : null;
+              $value = (isset($values->{$column})) ? $values->{$column} : $values[$new_column_name] ?? null;
+              switch ($value) {
+                  case 'null':
+                  case 'true':
+                  case 'false':
+                    $value = json_decode($value);
+                    break;
+              }
+
+              $values[$new_column_name] = $value;
+
+              $form[$tab_key]['subs'][$sub_key]['items'][$i]['column'] = $new_column_name;
+
+              // Remove unparsed column
+              unset($values->{$column});
+            }
+
+            if ($item['type'] == 'currency') {
+              $fraction_digits = auth()->user()->getCurrencyFormat('fraction_digits');
+              $multiplier = str_pad(1, $fraction_digits + 1, 0);
+              $values[$new_column_name] = (is_numeric($values[$new_column_name])) ? number_format ($values[$new_column_name] / $multiplier, $fraction_digits) : $values[$new_column_name];
+            } elseif ($item['type'] == 'image') {
+              // Defaults
+              $values[$new_column_name . '_media_name'] = '';
+              $values[$new_column_name . '_media_url'] = '';
+              $values[$new_column_name . '_media_file'] = '';
+              $values[$new_column_name . '_media_changed'] = false;
+
+              // Check if media is attached
+              if ($uuid !== null) {
+                $media = $values->getFirstMedia($new_column_name);
+                if ($media !== null) {
+                  $values[$new_column_name . '_media_name'] = $media->name;
+                  $values[$new_column_name . '_media_url'] = $media->getFullUrl();
+                }
+              }
+            } elseif($item['type'] == 'images') {
+              // Defaults
+              $values[$new_column_name . '_media_name'] = '';
+              $values[$new_column_name . '_media_url'] = '';
+              $values[$new_column_name . '_media_file'] = '';
+              $values[$new_column_name . '_media_changed'] = false;
+
+              // Check if media is attached
+              if ($uuid !== null) {
+                //$media = $values->getFirstMedia($new_column_name);
+                //if ($media !== null) {
+                  //$values[$new_column_name . '_media_name'] = $media->name;
+                  //$values[$new_column_name . '_media_url'] = $media->getFullUrl();
+                //}
+              }
+            } elseif ($item['type'] == 'relation' && $item['relation']['type'] == 'belongsToMany') {
+              if ($uuid !== null) {
+                $values[$item['relation']['with']] = $values->{$item['relation']['with']}()->pluck($relation['remote_pk']);
+              }
+            } elseif ($item['type'] == 'password') {
+              $values[$new_column_name . '_show'] = false;
+            } elseif ($item['type'] == 'boolean') {
+              $values[$new_column_name] = (boolean) $values[$new_column_name];
+            } elseif ($item['type'] == 'date_time') {
+              if ($values[$new_column_name] != '') {
+                $value = Carbon::parse($values[$new_column_name], config('app.timezone'))->setTimezone(auth()->user()->getTimezone());
+                $values[$new_column_name] = $value->format('Y-m-d H:i:s');
+              } else {
+                $values[$new_column_name] = null;
+              }
+            }
+          }
+        }
+      }
+
+      // Parse form settings
+      $form = $this->parseFormSettings($form, $uuid === null);
+
+      // Remove unused columns
+      $values = collect($values)->except($extraQueryColumns);
+
+      // Limitations
+      $limitReached = false;
+      $limitationMax = -1;
+      $count = 0;
+      if ($limitationName != '' && $uuid === null && auth()->user()->plan_limitations !== true) {
+        $count = $allRecords->count();
+        $limitationMax = auth()->user()->plan_limitations[$limitationName];
+        $limitReached = ($count < $limitationMax) ? false : true;
+      } elseif ($uuid === null && auth()->user()->plan_limitations !== true) {
+        $count = $allRecords->count();
+        $limitationMax = auth()->user()->plan_limitations;
+        $limitReached = ($count < $limitationMax) ? false : true;
+      }
+
+
+      // Transform translations
+      $new_translations = [];
+      foreach ($translations as $key => $translation) {
+        $new_translations[$key] = $translation;
+        $new_translations[$key . '_lowercase'] = strtolower($translation);
+      }
+      $translations = $new_translations;
+
+      return response()->json(['status' => 'success', 'settings' => $settings, 'form' => $form, 'relations' => $relations, 'values' => $values, 'dates' => $dates, 'actions' => $actions, 'translations' => $translations, 'count' => $count, 'max' => $limitationMax, 'limitReached' => $limitReached], 200);
+    }
+
+    public function postSavePassword(Request $request)
+    {
+        $arr_ = json_decode($request->formModel, true);
+        // return $arr_['password'];
+        $user = User::find($arr_['id']);
+        $user->password = $arr_['password'];
+        $user->save();
+        return response()->json(['status' => 'success', 'user' => $user], 200);
     }
 }

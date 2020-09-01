@@ -9,6 +9,9 @@ Vue.component('data-table', DataTable)
 import DataForm from '@/components/data/DataForm.vue'
 Vue.component('data-form', DataForm)
 
+import passwordForm from '@/components/data/Password.vue'
+Vue.component('password-form', passwordForm)
+
 import Payments from '@/components/data/Payments.vue'
 Vue.component('data-payments', Payments)
 
