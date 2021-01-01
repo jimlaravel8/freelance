@@ -141,6 +141,8 @@ Route::group(['middleware' => 'auth:api'], function () {
         Route::get('stats', '\Platform\Controllers\Business\BusinessesController@getStats');
         Route::get('dailypoints', '\Platform\Controllers\Business\BusinessesController@getDailyPoints');
 
+        Route::patch('tran_update/{id}', '\Platform\Controllers\Business\BusinessesController@tran_update');
+
     });
 });
 

@@ -127,7 +127,12 @@ export default {
             Montserrat: "Montserrat",
             "St. Kitts and Nevis": "St. Kitts and Nevis",
             "St. Lucia": "St. Lucia",
-            "St. Vincent": "St. Vincent"
+            "St. Vincent": "St. Vincent",
+            Barbados: "Barbados",
+            Jamaica: "Jamaica",
+            Trinidad: "Trinidad",
+            Guyana: "Guyana",
+            "Virgin Islands": "Virgin Islands"
         });
         this.form1.locale = "en";
         // Intl.DateTimeFormat().resolvedOptions().locale || this.$i18n.locale;
@@ -196,6 +201,16 @@ export default {
 
             } else if (this.form1.location == "St. Vincent") {
                 this.form1.country_code = '1784'
+            } else if (this.form1.location == "Barbados") {
+                this.form1.country_code = '1246'
+            } else if (this.form1.location == "Jamaica") {
+                this.form1.country_code = '1876'
+            } else if (this.form1.location == "Trinidad") {
+                this.form1.country_code = '1868'
+            } else if (this.form1.location == "Guyana") {
+                this.form1.country_code = '1592'
+            } else if (this.form1.location == "Virgin Islands") {
+                this.form1.country_code = '1284'
             }
 
             // console.log(this.country_code, this.form1.location);

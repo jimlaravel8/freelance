@@ -37,7 +37,7 @@
                                                 <template v-slot:item.points="{ item }">{{ formatNumber(item.points) }}</template>
                                                 <template v-slot:item.value="{ item }" v-if="business">{{ formatCurrency(item.value) }}</template>
                                                 <template v-slot:item.event="{ item }" v-if="business">
-                                                    <div>
+                                                    <div @click="editAmount(item)">
                                                         <p>{{ item.event }}</p>
                                                         <v-chip small>XCD {{ item.purchase_amount }}</v-chip>
                                                     </div>
@@ -45,6 +45,42 @@
                                                 </template>
                                                 <template v-slot:item.expires_at="{ item }">{{ formatDate(item.expires_at, 'ago') }}</template>
                                                 <template v-slot:item.created_at="{ item }">{{ formatDate(item.created_at, 'lll') }}</template>
+
+                                                <!-- <template v-slot:item.customer_number="{ item }">
+                                                    <v-tooltip bottom v-model="show" max-width="340" color="NavBg NagFg--text">
+                                                        <template v-slot:activator="{ on, attrs }">
+                                                            <v-chip class="ma-2" color="primary" v-bind="attrs" v-on="on">
+                                                                {{ item.customer_number }}
+                                                            </v-chip>=
+                                                        </template>
+                                                        <span>{{ item.customer.name }}
+                                                        </span>
+                                                    </v-tooltip>=
+                                                </template> -->
+                                                <template v-slot:item.customer_number="{ item }">
+                                                    <v-tooltip bottom color="NavBg NagFg--text">
+                                                        <template v-slot:activator="{ on, attrs }">
+                                                            <span v-bind="attrs" v-on="on">
+                                                                <v-chip class="ma-2">
+                                                                    {{ item.customer_number }}
+                                                                </v-chip>
+                                                            </span>
+                                                        </template>
+                                                        <span>
+                                                            Name: {{ item.customer.name }} <br />
+                                                            Location: {{ item.customer.location }}
+                                                        </span>
+                                                    </v-tooltip>
+                                                </template>
+                                                <!-- <template v-slot:item.event="props">
+                                                    <v-edit-dialog :return-value.sync="props.item.event" @save="save" @cancel="cancel" @open="open" @close="close"> {{ props.item.purchase_amount }}
+                                                        <template v-slot:input>
+                                                            <v-text-field v-model="props.item.purchase_amount" :rules="[max25chars]" label="Edit" single-line counter></v-text-field>
+                                                        </template>
+                                                    </v-edit-dialog>
+                                                    <v-chip small>XCD {{ item.purchase_amount }}</v-chip>
+                                                </template> -->
+
                                             </v-data-table>
                                         </v-card-text>
                                     </v-card>
@@ -56,12 +92,42 @@
             </v-container>
         </v-img>
     </v-container>
+
+    <v-dialog v-model="dialog" width="400">
+        <v-card>
+            <v-card-title class="headline grey lighten-2">
+                Edit Amount
+            </v-card-title>
+
+            <v-card-text>
+                <v-text-field v-model="form.purchase_amount" label="Purchase amount" required></v-text-field>
+            </v-card-text>
+
+            <v-card-actions>
+                <v-spacer></v-spacer>
+                <v-btn color="primary" text @click="save">
+                    Save
+                </v-btn>
+            </v-card-actions>
+        </v-card>
+    </v-dialog>
+    <v-snackbar v-model="snackbar">
+        {{ text }}
+
+        <template v-slot:action="{ attrs }">
+            <v-btn color="pink" text v-bind="attrs" @click="snackbar = false">
+                Close
+            </v-btn>
+        </template>
+    </v-snackbar>
 </div>
 </template>
 
 <script>
 export default {
     data: () => ({
+        dialog: false,
+        show: false,
         locale: "en",
         tab: "tab-0",
         tabImg: "about:blank",
@@ -73,7 +139,10 @@ export default {
         business: null,
         search: "",
         itemsPerPageOptions: [10, 25, 50, 75, 100],
-        transactions: []
+        transactions: [],
+        form: {},
+        snackbar: false,
+        text: 'Updated',
     }),
     created() {
         // Set locale
@@ -163,6 +232,46 @@ export default {
                 this.tabImgHeight = this.tabImgDefaultHeight;
                 this.tabImgAspectRation = 1.7778;
             }
+        },
+        editAmount(item) {
+            console.log(item);
+            this.dialog = true
+            this.form = item
+
+        },
+        save() {
+
+            this.axios
+                .patch('/business/tran_update/' + this.form.id, {
+                    locale: this.$i18n.locale,
+                    form: this.form
+                })
+                .then(response => {
+                    this.snackbar = true
+                    this.dialog = false
+                    this.getTransactions()
+                    if (response.data.status === 'success') {
+                        // this.invalidToken = false
+                    } else {
+                        // this.invalidToken = true
+                    }
+                })
+                .catch(() => {
+                    // this.invalidToken = true
+                })
+        },
+
+        getTransactions() {
+            this.axios
+                .get("/business/transactions", {
+                    params: {
+                        locale: this.$i18n.locale
+                    }
+                })
+                .then(response => {
+                    this.transactions = response.data;
+                    this.loading = false;
+                });
         }
     },
     computed: {

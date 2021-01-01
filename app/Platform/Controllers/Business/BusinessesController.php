@@ -492,9 +492,10 @@ class BusinessesController extends \App\Http\Controllers\Controller
         $transactions = $transactions->map(function ($transaction) use ($staff, $business) {
             return [
                 // 'business_id' => $business['name'],
+                'id' => $transaction->id,
                 'uuid' => $transaction->uuid,
                 'customer_number' => $transaction->customer->whatsapp,
-                //   'customer_number' => $transaction->customer_number,
+                  'customer' => $transaction->customer,
                 'event' => trans('app.' . $transaction->event),
                 'points' => $transaction->points,
                 'value' => $transaction->points * $business['point_value'],
@@ -508,6 +509,7 @@ class BusinessesController extends \App\Http\Controllers\Controller
 
         return response()->json($transactions, 200);
     }
+
 
     /**
      * Get `active` businesses by `alphabetic order`.
@@ -567,5 +569,13 @@ class BusinessesController extends \App\Http\Controllers\Controller
             ['count_issuance' => $count_issuance],
             ['count_redemption' => $count_redemption]
         );
+    }
+
+    public function tran_update(Request $request, $id)
+    {
+        // return $request->all();
+        $history = History::find($id);
+        $history->purchase_amount = $request->form['purchase_amount'];
+        $history->save();
     }
 }

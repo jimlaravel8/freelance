@@ -424,6 +424,8 @@ export default {
             loadLanguageAsync(language);
         }
 
+        this.getNotifications();
+
         // Set locale
         let locale = Intl.DateTimeFormat().resolvedOptions().locale || "en";
         locale = this.$auth.check() ? this.$auth.user().locale : locale;
@@ -756,7 +758,12 @@ export default {
             }
             return menu;
         }
-    }
+    },
+    created () {
+        eventBus.$on('NotificationEvent', data => {
+            this.getNotifications()
+        });
+    },
 };
 </script>
 

@@ -46,7 +46,7 @@ export default {
                 {
                     text: 'Category',
                     value: 'category'
-                }
+                },
                 {
                     text: 'Billings summary',
                     value: 'billings'

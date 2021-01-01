@@ -218,6 +218,10 @@ export default {
                         name: redirect ? redirect.from.name : redirectTo,
                         query: redirect ? redirect.from.query : null
                     });
+                    eventBus.$emit('NotificationEvent');
+
+
+
                 },
                 error: function (error) {
                     form.loading = false;

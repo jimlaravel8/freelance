@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 namespace Platform\Controllers\Core;
 
@@ -13,7 +13,7 @@ class Localization extends \App\Http\Controllers\Controller {
     /**
      * Get locales
      *
-     * @return \Symfony\Component\HttpFoundation\Response 
+     * @return \Symfony\Component\HttpFoundation\Response
      */
     public static function getLocales() {
         $locale = request('locale', config('default.language'));
@@ -42,7 +42,7 @@ class Localization extends \App\Http\Controllers\Controller {
     /**
      * Get timezones
      *
-     * @return \Symfony\Component\HttpFoundation\Response 
+     * @return \Symfony\Component\HttpFoundation\Response
      */
     public static function getTimezones() {
         // Get timezones
@@ -59,7 +59,7 @@ class Localization extends \App\Http\Controllers\Controller {
     /**
      * Get currencies
      *
-     * @return \Symfony\Component\HttpFoundation\Response 
+     * @return \Symfony\Component\HttpFoundation\Response
      */
     public static function getCurrencies() {
         $locale = request('locale', config('default.language'));
