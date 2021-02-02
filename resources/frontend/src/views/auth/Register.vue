@@ -103,16 +103,16 @@ export default {
         this.locations = this.$_.toPairs({
             Anguilla: "Anguilla",
             "Antigua and Barbuda": "Antigua and Barbuda",
+            Barbados: "Barbados",
             Dominica: "Dominica",
             Grenada: "Grenada",
+            Guyana: "Guyana",
+            Jamaica: "Jamaica",
             Montserrat: "Montserrat",
             "St. Kitts and Nevis": "St. Kitts and Nevis",
             "St. Lucia": "St. Lucia",
             "St. Vincent": "St. Vincent",
-            Barbados: "Barbados",
-            Jamaica: "Jamaica",
             Trinidad: "Trinidad",
-            Guyana: "Guyana",
             "Virgin Islands": "Virgin Islands"
 
         });
