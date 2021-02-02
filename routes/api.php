@@ -64,6 +64,7 @@ Route::group(['middleware' => 'auth:api'], function () {
 
         Route::post('statsfilter', '\Platform\Controllers\App\AdminController@statsfilter');
 
+        Route::any('business_filter', '\Platform\Controllers\App\AdminController@business_filter');
 
         Route::get('business_report', '\Platform\Controllers\App\AdminController@business_report');
 

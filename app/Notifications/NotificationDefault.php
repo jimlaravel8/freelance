@@ -13,17 +13,18 @@ class NotificationDefault extends Notification
     use Queueable;
 
 
-    public $email, $message, $via;
+    public $email, $message, $via, $subject;
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct(User $email, $message, $via)
+    public function __construct(User $email, $message, $via, $subject)
     {
         $this->email = $email;
         $this->message = $message;
         $this->via = $via;
+        $this->subject = $subject;
     }
 
     /**
@@ -47,7 +48,8 @@ class NotificationDefault extends Notification
     {
         return (new MailMessage)->markdown('mails.customerRegister')
                                 // ->to($this->email->to_email)
-                                ->subject($this->email->subject);
+                                // ->subject('Welcome to Piggy Bank Loyalty');
+                                ->subject($this->subject);
     }
 
     /**

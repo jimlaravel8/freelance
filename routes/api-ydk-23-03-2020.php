@@ -52,17 +52,18 @@ Route::group(['middleware' => 'auth:api'], function() {
             GROUP BY c.name'
         );
     });
-    
-    
-    
+
+
+
     // Admin related routes
     Route::group(['prefix' => 'admin', 'middleware' => 'role:1'], function () {
         Route::get('stats', '\Platform\Controllers\App\AdminController@getStats');
-        
+
         // Daily Earned Points
         Route::get('dailypoints', '\Platform\Controllers\App\StatisticsController@getDailyPoints');
         Route::get('redeemedpoints', '\Platform\Controllers\App\StatisticsController@getDailyRedeemedPointsByHours');
         Route::get('customers', '\Platform\Controllers\App\StatisticsController@getTotalCustomers');
+        Route::any('business_filter', '\Platform\Controllers\App\AdminController@business_filter');
 
         // Business Category Routes
         Route::get('category/get', '\Platform\Controllers\App\AdminController@getAllCategories');
@@ -74,7 +75,7 @@ Route::group(['middleware' => 'auth:api'], function() {
         // Transactions
         Route::get('transaction/{date}/{uuid}', '\Platform\Controllers\App\TransactionsController@adminGetMonthlyTransactions');
     });
-    
+
     // Customer related routes
     Route::group(['prefix' => 'customer', 'middleware' => 'role:2'], function () {
         // Wallet
@@ -83,7 +84,7 @@ Route::group(['middleware' => 'auth:api'], function() {
         Route::post('generate-discount-code', '\Platform\Controllers\Customer\CustomersController@postGenerateDiscountCode');
         Route::get('businesses', '\Platform\Controllers\App\StatisticsController@getBusinessesList');
        });
-    
+
     // Business related routes
     Route::group(['prefix' => 'business', 'middleware' => 'role:3'], function () {
         // Business settings
@@ -100,7 +101,7 @@ Route::group(['middleware' => 'auth:api'], function() {
         Route::post('stripe/token', '\Platform\Controllers\App\StripeController@postToken');
         Route::post('stripe/cancel', '\Platform\Controllers\App\StripeController@postCancelSubscription');
     });
-    
+
     // Business and staff related routes
     Route::group(['prefix' => 'business', 'middleware' => 'role:3,4'], function () {
         // Business settings
@@ -109,15 +110,15 @@ Route::group(['middleware' => 'auth:api'], function() {
         // Issue points
         Route::post('issue/verify-customer-number', '\Platform\Controllers\Business\BusinessesController@postVerifyCustomerNumber');
         Route::post('issue/amount', '\Platform\Controllers\Business\BusinessesController@postIssueAmount');
-        
+
         // Redeem points
         Route::post('redeem/verify-code', '\Platform\Controllers\Business\BusinessesController@postVerifyRedemptionCode');
         Route::post('redeem/process-code', '\Platform\Controllers\Business\BusinessesController@postProcessRedemptionCode');
-        
+
         // Transactions
         Route::get('transactions', '\Platform\Controllers\Business\BusinessesController@getTransactions');
-        
-        
+
+
         // Test
         // Route::get('transactions', '\Platform\Controllers\App\TransactionsController@getCurrentMonthTransactions');
         Route::get('transaction/{date}', '\Platform\Controllers\App\TransactionsController@getMonthlyTransactions');

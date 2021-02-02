@@ -70,6 +70,8 @@ Route::group(['middleware' => 'auth:api'], function() {
         Route::post('category/create', '\Platform\Controllers\App\AdminController@createNewCategory');
         Route::post('category/update/{id}', '\Platform\Controllers\App\AdminController@updateExistingCategory');
         Route::post('category/delete/{id}', '\Platform\Controllers\App\AdminController@deleteAnExistingCategory');
+
+        Route::any('business_filter', '\Platform\Controllers\App\AdminController@business_filter');
     });
 
     // Customer related routes
@@ -85,6 +87,7 @@ Route::group(['middleware' => 'auth:api'], function() {
     Route::group(['prefix' => 'business', 'middleware' => 'role:3'], function () {
         // Business settings
         Route::post('settings', '\Platform\Controllers\Business\BusinessesController@postSettings');
+
 
         // Rules
         Route::post('rules', '\Platform\Controllers\Business\BusinessesController@postUpdateRules');

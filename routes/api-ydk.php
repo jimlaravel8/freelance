@@ -52,13 +52,13 @@ Route::group(['middleware' => 'auth:api'], function() {
             GROUP BY c.name'
         );
     });
-    
-    
-    
+
+
+
     // Admin related routes
     Route::group(['prefix' => 'admin', 'middleware' => 'role:1'], function () {
         Route::get('stats', '\Platform\Controllers\App\AdminController@getStats');
-        
+
         // Daily Earned Points
         Route::get('dailypoints', '\Platform\Controllers\App\StatisticsController@getDailyPoints');
         Route::get('redeemedpoints', '\Platform\Controllers\App\StatisticsController@getDailyRedeemedPointsByHours');
@@ -70,8 +70,9 @@ Route::group(['middleware' => 'auth:api'], function() {
         Route::post('category/create', '\Platform\Controllers\App\AdminController@createNewCategory');
         Route::post('category/update/{id}', '\Platform\Controllers\App\AdminController@updateExistingCategory');
         Route::post('category/delete/{id}', '\Platform\Controllers\App\AdminController@deleteAnExistingCategory');
+        Route::any('business_filter', '\Platform\Controllers\App\AdminController@business_filter');
     });
-    
+
     // Customer related routes
     Route::group(['prefix' => 'customer', 'middleware' => 'role:2'], function () {
         // Wallet
@@ -80,7 +81,7 @@ Route::group(['middleware' => 'auth:api'], function() {
         Route::post('generate-discount-code', '\Platform\Controllers\Customer\CustomersController@postGenerateDiscountCode');
         Route::get('businesses', '\Platform\Controllers\App\StatisticsController@getBusinessesList');
        });
-    
+
     // Business related routes
     Route::group(['prefix' => 'business', 'middleware' => 'role:3'], function () {
         // Business settings
@@ -97,7 +98,7 @@ Route::group(['middleware' => 'auth:api'], function() {
         Route::post('stripe/token', '\Platform\Controllers\App\StripeController@postToken');
         Route::post('stripe/cancel', '\Platform\Controllers\App\StripeController@postCancelSubscription');
     });
-    
+
     // Business and staff related routes
     Route::group(['prefix' => 'business', 'middleware' => 'role:3,4'], function () {
         // Business settings

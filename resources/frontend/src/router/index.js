@@ -614,6 +614,28 @@ const routes = [
         component: MasterLayout,
         children: [
             {
+                path: "/admin/business_account",
+                name: "admin.business_account",
+                components: {
+                    primary: () =>
+                        import(
+                            /* webpackChunkName: "x434a" */ "../views/admin/BusinessAccount.vue"
+                        )
+                }
+            }
+        ],
+        meta: {
+            auth: {
+                roles: [1]
+            }
+        }
+    },
+
+    {
+        path: "/",
+        component: MasterLayout,
+        children: [
+            {
                 path: "/404",
                 name: "404",
                 components: {

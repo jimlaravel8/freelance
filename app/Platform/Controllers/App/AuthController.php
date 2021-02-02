@@ -151,7 +151,8 @@ class AuthController extends \App\Http\Controllers\Controller
 
             $message = 'Your Piggy Bank account was created ';
             $via = ['database', 'mail'];
-            Notification::send($user, new NotificationDefault($user, $message, $via));
+            $subject = 'Welcome to Piggy Bank Loyalty';
+            Notification::send($user, new NotificationDefault($user, $message, $via, $subject));
 
             // \Log::debug($user);
 
@@ -198,7 +199,8 @@ class AuthController extends \App\Http\Controllers\Controller
 
         $message = 'Your Piggy Bank account was created ';
         $via = ['database', 'mail'];
-        Notification::send($user, new NotificationDefault($user, $message, $via));
+        $subject = 'Congratulations! Your business is now listed on our network';
+        Notification::send($user, new NotificationDefault($user, $message, $via, $subject));
 
         // $email = new \stdClass;
         // $email->locale = "en";

@@ -57,7 +57,9 @@ class PromoController extends Controller
             // return $value['no_count'];
             if ($value['no_count'] > 1) {
                 $customer_count += 1;
-                Notification::send($user, new NotificationDefault($user, $message, $via));
+
+                $subject = 'Promotion';
+                Notification::send($user, new NotificationDefault($user, $message, $via, $subject));
             }
         }
         $promo->customer_count = $customer_count;

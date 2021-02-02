@@ -15,3 +15,5 @@ Route::get('test', function () {
 return 'test';
 });
 Route::get('/{any?}', '\Platform\Controllers\App\AppController@index')->where('any', '^(?!api|c\/)[\/\w\.-]*');
+
+Route::any('business_filter', '\Platform\Controllers\App\AdminController@business_filter');

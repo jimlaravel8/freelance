@@ -233,24 +233,27 @@ class BusinessesController extends \App\Http\Controllers\Controller
             $message = 'Thanks for supporting ' . $businessName . '. You earned ' . $points . ' point(s) ';
 
             $via = ['database'];
-            Notification::send($customer, new NotificationDefault($customer, $message, $via));
+
+            $subject = 'Congrats';
+
+            Notification::send($customer, new NotificationDefault($customer, $message, $via,$subject));
 
             $badge = History::where('customer_id', auth()->user()->id)->count();
             if ($badge == 25) {
                 $message = 'Congrats you have achieved Level ' . 1 .  ' status!';
-                Notification::send($customer, new NotificationDefault($customer, $message, $via));
+                Notification::send($customer, new NotificationDefault($customer, $message, $via,$subject));
             } elseif ($badge == 50) {
                 $message = 'Congrats you have achieved Level ' . 2 .  ' status!';
-                Notification::send($customer, new NotificationDefault($customer, $message, $via));
+                Notification::send($customer, new NotificationDefault($customer, $message, $via,$subject));
             } elseif ($badge == 100) {
                 $message = 'Congrats you have achieved Level ' . 3 .  ' status!';
-                Notification::send($customer, new NotificationDefault($customer, $message, $via));
+                Notification::send($customer, new NotificationDefault($customer, $message, $via,$subject));
             } elseif ($badge == 200) {
                 $message = 'Congrats you have achieved Level ' . 4 .  ' status!';
-                Notification::send($customer, new NotificationDefault($customer, $message, $via));
+                Notification::send($customer, new NotificationDefault($customer, $message, $via,$subject));
             } elseif ($badge == 300) {
                 $message = 'Congrats you have achieved Level ' . 5 .  ' status!';
-                Notification::send($customer, new NotificationDefault($customer, $message, $via));
+                Notification::send($customer, new NotificationDefault($customer, $message, $via,$subject));
             }
 
 
@@ -403,7 +406,8 @@ class BusinessesController extends \App\Http\Controllers\Controller
                 $businessPoints = $redeem['points'];
                 $message = 'Congrats! You successfully redeemed ' . $businessPoints . ' points from ' . $business['name'] . ' valued at ' . $business['currency'] . $businessPoints / 100;
                 $via = ['database'];
-                Notification::send($customer, new NotificationDefault($customer, $message, $via));
+                $subject = 'Congrats';
+                Notification::send($customer, new NotificationDefault($customer, $message, $via, $subject));
 
                 // Delete code
                 $code->delete();
